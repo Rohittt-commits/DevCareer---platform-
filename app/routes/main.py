@@ -1,8 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
+from flask_login import login_required, current_user
+
 
 main = Blueprint("main", __name__)
 
 
 @main.route("/")
+@login_required
 def home():
-    return "DevCareer is running! 🚀"
+    return render_template("dashboard.html")
