@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project | DevCareer</title>
+</head>
+<body>
+
+    <h1>Add New Project</h1>
+
+    <form method="POST">
+
+        <div>
+            <label for="title">Project Title</label>
+            <br>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                required
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="description">Description</label>
+            <br>
+            <textarea
+                id="description"
+                name="description"
+                rows="5"
+                required
+            ></textarea>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="tech_stack">Tech Stack</label>
+            <br>
+            <input
+                type="text"
+                id="tech_stack"
+                name="tech_stack"
+                placeholder="Python, Flask, SQLite"
+                required
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="github_url">GitHub URL</label>
+            <br>
+            <input
+                type="url"
+                id="github_url"
+                name="github_url"
+                placeholder="https://github.com/..."
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="live_url">Live Project URL</label>
+            <br>
+            <input
+                type="url"
+                id="live_url"
+                name="live_url"
+                placeholder="https://..."
+            >
+        </div>
+
+        <br>
+
+        <div>
+            <label for="status">Status</label>
+            <br>
+
+            <select id="status" name="status">
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Planned">Planned</option>
+                <option value="On Hold">On Hold</option>
+            </select>
+        </div>
+
+        <br>
+
+        <button type="submit">Add Project</button>
+
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('projects.list_projects') }}">
+        Back to Projects
+    </a>
+
+</body>
+</html>

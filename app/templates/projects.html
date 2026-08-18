@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects | DevCareer</title>
+</head>
+<body>
+
+    <h1>My Projects</h1>
+
+    <p>
+        <a href="{{ url_for('main.home') }}">Dashboard</a>
+        |
+        <a href="{{ url_for('projects.add_project') }}">Add Project</a>
+        |
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </p>
+
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if projects %}
+
+        {% for project in projects %}
+
+            <div>
+                <h2>{{ project.title }}</h2>
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ project.status }}
+                </p>
+
+                <p>
+                    <strong>Description:</strong>
+                    {{ project.description }}
+                </p>
+
+                <p>
+                    <strong>Tech Stack:</strong>
+                    {{ project.tech_stack }}
+                </p>
+
+                {% if project.github_url %}
+                    <p>
+                        <a href="{{ project.github_url }}" target="_blank">
+                            GitHub
+                        </a>
+                    </p>
+                {% endif %}
+
+                {% if project.live_url %}
+                    <p>
+                        <a href="{{ project.live_url }}" target="_blank">
+                            Live Project
+                        </a>
+                    </p>
+                {% endif %}
+
+                <a href="{{ url_for('projects.edit_project', project_id=project.id) }}">
+                    Edit
+                </a>
+
+                <form
+                    method="POST"
+                    action="{{ url_for('projects.delete_project', project_id=project.id) }}"
+                    style="display:inline;"
+                >
+                    <button type="submit">
+                        Delete
+                    </button>
+                </form>
+
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <h2>No projects yet.</h2>
+        <p>Start building your career portfolio by adding your first project.</p>
+
+        <a href="{{ url_for('projects.add_project') }}">
+            Add Your First Project
+        </a>
+
+    {% endif %}
+
+</body>
+</html>
