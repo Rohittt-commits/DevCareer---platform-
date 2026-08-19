@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ project.title }} - DevCareer{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="page-header">
+
+        <div>
+            <h1>Edit Project</h1>
+            <p>Update your project information.</p>
+        </div>
+
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="project-form">
+
+        <div class="form-group">
+
+            <label for="title">
+                Project Title *
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="{{ project.title }}"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                rows="5"
+            >{{ project.description or "" }}</textarea>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="technologies">
+                Technologies
+            </label>
+
+            <input
+                type="text"
+                id="technologies"
+                name="technologies"
+                value="{{ project.technologies or "" }}"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="github_url">
+                GitHub URL
+            </label>
+
+            <input
+                type="url"
+                id="github_url"
+                name="github_url"
+                value="{{ project.github_url or "" }}"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="live_url">
+                Live Project URL
+            </label>
+
+            <input
+                type="url"
+                id="live_url"
+                name="live_url"
+                value="{{ project.live_url or "" }}"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="status">
+                Status
+            </label>
+
+            <select id="status" name="status">
+
+                <option
+                    value="In Progress"
+                    {% if project.status == "In Progress" %}selected{% endif %}
+                >
+                    In Progress
+                </option>
+
+                <option
+                    value="Completed"
+                    {% if project.status == "Completed" %}selected{% endif %}
+                >
+                    Completed
+                </option>
+
+                <option
+                    value="On Hold"
+                    {% if project.status == "On Hold" %}selected{% endif %}
+                >
+                    On Hold
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="form-actions">
+
+            <a
+                href="{{ url_for('projects.project_detail', project_id=project.id) }}"
+                class="btn secondary"
+            >
+                Cancel
+            </a>
+
+            <button type="submit" class="btn">
+                Save Changes
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,70 +1,78 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 
 from app import db
 from app.models.project import Project
 
 
-projects = Blueprint(
-    "projects",
-    __name__,
-    url_prefix="/projects"
-)
+projects = Blueprint("projects", __name__, url_prefix="/projects")
 
 
 @projects.route("/")
 @login_required
 def list_projects():
-    user_projects = Project.query.filter_by(
+    projects_list = Project.query.filter_by(
         user_id=current_user.id
     ).order_by(
         Project.created_at.desc()
     ).all()
 
     return render_template(
-        "projects.html",
-        projects=user_projects
+        "projects/list.html",
+        projects=projects_list
     )
 
 
-@projects.route("/add", methods=["GET", "POST"])
+@projects.route("/create", methods=["GET", "POST"])
 @login_required
-def add_project():
+def create_project():
     if request.method == "POST":
-        title = request.form.get("title")
-        description = request.form.get("description")
-        tech_stack = request.form.get("tech_stack")
-        github_url = request.form.get("github_url")
-        live_url = request.form.get("live_url")
-        status = request.form.get("status")
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+        technologies = request.form.get("technologies", "").strip()
+        github_url = request.form.get("github_url", "").strip()
+        live_url = request.form.get("live_url", "").strip()
+        status = request.form.get("status", "In Progress").strip()
 
-        if not title or not description or not tech_stack:
-            flash(
-                "Title, description and tech stack are required.",
-                "error"
-            )
-            return redirect(url_for("projects.add_project"))
+        if not title:
+            flash("Project title is required.", "danger")
+            return render_template("projects/create.html")
 
         project = Project(
+            user_id=current_user.id,
             title=title,
             description=description,
-            tech_stack=tech_stack,
+            technologies=technologies,
             github_url=github_url,
             live_url=live_url,
-            status=status or "In Progress",
-            user_id=current_user.id
+            status=status
         )
 
         db.session.add(project)
         db.session.commit()
 
-        flash("Project added successfully!", "success")
+        flash("Project created successfully!", "success")
+
         return redirect(url_for("projects.list_projects"))
 
-    return render_template("add_project.html")
+    return render_template("projects/create.html")
 
 
-@projects.route("/edit/<int:project_id>", methods=["GET", "POST"])
+@projects.route("/<int:project_id>")
+@login_required
+def project_detail(project_id):
+    project = Project.query.filter_by(
+        id=project_id,
+        user_id=current_user.id
+    ).first_or_404()
+
+    return render_template(
+        "projects/detail.html",
+        project=project
+    )
+
+
+@projects.route("/<int:project_id>/edit", methods=["GET", "POST"])
 @login_required
 def edit_project(project_id):
     project = Project.query.filter_by(
@@ -73,25 +81,45 @@ def edit_project(project_id):
     ).first_or_404()
 
     if request.method == "POST":
-        project.title = request.form.get("title")
-        project.description = request.form.get("description")
-        project.tech_stack = request.form.get("tech_stack")
-        project.github_url = request.form.get("github_url")
-        project.live_url = request.form.get("live_url")
-        project.status = request.form.get("status") or "In Progress"
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+        technologies = request.form.get("technologies", "").strip()
+        github_url = request.form.get("github_url", "").strip()
+        live_url = request.form.get("live_url", "").strip()
+        status = request.form.get("status", "In Progress").strip()
+
+        if not title:
+            flash("Project title is required.", "danger")
+            return render_template(
+                "projects/edit.html",
+                project=project
+            )
+
+        project.title = title
+        project.description = description
+        project.technologies = technologies
+        project.github_url = github_url
+        project.live_url = live_url
+        project.status = status
 
         db.session.commit()
 
         flash("Project updated successfully!", "success")
-        return redirect(url_for("projects.list_projects"))
+
+        return redirect(
+            url_for(
+                "projects.project_detail",
+                project_id=project.id
+            )
+        )
 
     return render_template(
-        "edit_project.html",
+        "projects/edit.html",
         project=project
     )
 
 
-@projects.route("/delete/<int:project_id>", methods=["POST"])
+@projects.route("/<int:project_id>/delete", methods=["POST"])
 @login_required
 def delete_project(project_id):
     project = Project.query.filter_by(
@@ -102,5 +130,6 @@ def delete_project(project_id):
     db.session.delete(project)
     db.session.commit()
 
-    flash("Project deleted successfully.", "success")
+    flash("Project deleted successfully!", "success")
+
     return redirect(url_for("projects.list_projects"))

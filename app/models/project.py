@@ -4,15 +4,40 @@ from app import db
 
 
 class Project(db.Model):
+    __tablename__ = "projects"
+
     id = db.Column(db.Integer, primary_key=True)
 
-    title = db.Column(db.String(150), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id"),
+        nullable=False
+    )
 
-    tech_stack = db.Column(db.String(300), nullable=False)
+    title = db.Column(
+        db.String(150),
+        nullable=False
+    )
 
-    github_url = db.Column(db.String(300), nullable=True)
-    live_url = db.Column(db.String(300), nullable=True)
+    description = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    technologies = db.Column(
+        db.String(500),
+        nullable=True
+    )
+
+    github_url = db.Column(
+        db.String(300),
+        nullable=True
+    )
+
+    live_url = db.Column(
+        db.String(300),
+        nullable=True
+    )
 
     status = db.Column(
         db.String(50),
@@ -26,8 +51,20 @@ class Project(db.Model):
         nullable=False
     )
 
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey("users.id"),
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
         nullable=False
     )
+
+    user = db.relationship(
+        "User",
+        backref=db.backref(
+            "projects",
+            lazy=True
+        )
+    )
+
+    def __repr__(self):
+        return f"<Project {self.title}>"

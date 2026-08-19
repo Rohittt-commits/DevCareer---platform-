@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}My Projects - DevCareer{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="page-header">
+        <div>
+            <h1>My Projects</h1>
+            <p>Manage and track your development projects.</p>
+        </div>
+
+        <a href="{{ url_for('projects.create_project') }}" class="btn">
+            + Add Project
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if projects %}
+
+        <div class="projects-grid">
+
+            {% for project in projects %}
+
+                <div class="project-card">
+
+                    <div class="project-card-header">
+                        <h2>{{ project.title }}</h2>
+
+                        <span class="status">
+                            {{ project.status }}
+                        </span>
+                    </div>
+
+                    {% if project.description %}
+                        <p class="project-description">
+                            {{ project.description }}
+                        </p>
+                    {% else %}
+                        <p class="project-description muted">
+                            No description added.
+                        </p>
+                    {% endif %}
+
+                    {% if project.technologies %}
+                        <p>
+                            <strong>Technologies:</strong>
+                            {{ project.technologies }}
+                        </p>
+                    {% endif %}
+
+                    <div class="project-actions">
+
+                        <a
+                            href="{{ url_for('projects.project_detail', project_id=project.id) }}"
+                            class="btn secondary"
+                        >
+                            View
+                        </a>
+
+                        <a
+                            href="{{ url_for('projects.edit_project', project_id=project.id) }}"
+                            class="btn secondary"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('projects.delete_project', project_id=project.id) }}"
+                            onsubmit="return confirm('Are you sure you want to delete this project?');"
+                        >
+                            <button type="submit" class="btn danger">
+                                Delete
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <h2>No projects yet</h2>
+
+            <p>
+                Start building your developer portfolio by adding your first project.
+            </p>
+
+            <a
+                href="{{ url_for('projects.create_project') }}"
+                class="btn"
+            >
+                Add Your First Project
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

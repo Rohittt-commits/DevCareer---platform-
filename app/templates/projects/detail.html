@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} - DevCareer{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="page-header">
+
+        <div>
+            <h1>{{ project.title }}</h1>
+
+            <span class="status">
+                {{ project.status }}
+            </span>
+        </div>
+
+        <div class="project-actions">
+
+            <a
+                href="{{ url_for('projects.edit_project', project_id=project.id) }}"
+                class="btn"
+            >
+                Edit Project
+            </a>
+
+            <a
+                href="{{ url_for('projects.list_projects') }}"
+                class="btn secondary"
+            >
+                Back to Projects
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="project-detail-card">
+
+        <section>
+
+            <h2>Description</h2>
+
+            {% if project.description %}
+                <p>{{ project.description }}</p>
+            {% else %}
+                <p class="muted">
+                    No description added.
+                </p>
+            {% endif %}
+
+        </section>
+
+        <section>
+
+            <h2>Technologies</h2>
+
+            {% if project.technologies %}
+                <p>{{ project.technologies }}</p>
+            {% else %}
+                <p class="muted">
+                    No technologies added.
+                </p>
+            {% endif %}
+
+        </section>
+
+        <section>
+
+            <h2>Links</h2>
+
+            {% if project.github_url %}
+
+                <p>
+                    <strong>GitHub:</strong>
+
+                    <a
+                        href="{{ project.github_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View Repository
+                    </a>
+                </p>
+
+            {% endif %}
+
+            {% if project.live_url %}
+
+                <p>
+                    <strong>Live Project:</strong>
+
+                    <a
+                        href="{{ project.live_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Open Project
+                    </a>
+                </p>
+
+            {% endif %}
+
+            {% if not project.github_url and not project.live_url %}
+
+                <p class="muted">
+                    No links added.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+        <section>
+
+            <h2>Project Information</h2>
+
+            <p>
+                <strong>Created:</strong>
+                {{ project.created_at.strftime("%d %B %Y") }}
+            </p>
+
+            <p>
+                <strong>Last Updated:</strong>
+                {{ project.updated_at.strftime("%d %B %Y") }}
+            </p>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
