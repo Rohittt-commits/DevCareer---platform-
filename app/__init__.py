@@ -24,6 +24,7 @@ def create_app():
 
     # Import User model
     from app.models.user import User
+    from app.models.skill import Skill
 
     # Flask-Login user loader
     @login_manager.user_loader
