@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+
 
 
 db = SQLAlchemy()
@@ -42,5 +43,8 @@ def create_app():
     # Register Projects blueprint
     from app.routes.projects import projects
     app.register_blueprint(projects)
+
+    from app.routes.skills import skills
+    app.register_blueprint(skills)
 
     return app

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Add Skill</h1>
+    <p class="text-muted">Add a skill to your career profile.</p>
+
+    <form method="POST">
+
+        <div class="mb-3">
+            <label class="form-label">Skill Name</label>
+            <input
+                type="text"
+                name="name"
+                class="form-control"
+                placeholder="e.g. Python"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            <input
+                type="text"
+                name="category"
+                class="form-control"
+                placeholder="e.g. Backend Development"
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Proficiency</label>
+            <select name="proficiency" class="form-select" required>
+                <option value="">Select level</option>
+                <option value="1">1 - Beginner</option>
+                <option value="2">2 - Basic</option>
+                <option value="3">3 - Intermediate</option>
+                <option value="4">4 - Advanced</option>
+                <option value="5">5 - Expert</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Experience (months)</label>
+            <input
+                type="number"
+                name="experience_months"
+                class="form-control"
+                min="0"
+                value="0"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <textarea
+                name="notes"
+                class="form-control"
+                rows="4"
+                placeholder="Optional notes about this skill..."
+            ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Add Skill
+        </button>
+
+        <a href="{{ url_for('skills.list_skills') }}"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Edit Skill</h1>
+    <p class="text-muted">Update your skill information.</p>
+
+    <form method="POST">
+
+        <div class="mb-3">
+            <label class="form-label">Skill Name</label>
+            <input
+                type="text"
+                name="name"
+                class="form-control"
+                value="{{ skill.name }}"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            <input
+                type="text"
+                name="category"
+                class="form-control"
+                value="{{ skill.category or '' }}"
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Proficiency</label>
+            <select name="proficiency" class="form-select" required>
+                {% for level in range(1, 6) %}
+                    <option
+                        value="{{ level }}"
+                        {% if skill.proficiency == level %}selected{% endif %}
+                    >
+                        {{ level }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Experience (months)</label>
+            <input
+                type="number"
+                name="experience_months"
+                class="form-control"
+                min="0"
+                value="{{ skill.experience_months }}"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Notes</label>
+            <textarea
+                name="notes"
+                class="form-control"
+                rows="4"
+            >{{ skill.notes or '' }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+        </button>
+
+        <a href="{{ url_for('skills.list_skills') }}"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+{% endblock %}
