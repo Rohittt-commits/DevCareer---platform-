@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+
+        <div>
+            <h1>Job Applications</h1>
+            <p>Track your internship and job applications.</p>
+        </div>
+
+        <a
+            href="{{ url_for('applications.add_application') }}"
+            class="btn btn-primary"
+        >
+            + Add Application
+        </a>
+
+    </div>
+
+
+    {% if applications %}
+
+        {% for application in applications %}
+
+            <div class="card" style="margin-bottom:20px;">
+
+                <div class="card-body">
+
+                    <div style="display:flex; justify-content:space-between;">
+
+                        <div>
+
+                            <h3>
+                                {{ application.position }}
+                            </h3>
+
+                            <p>
+                                <strong>{{ application.company }}</strong>
+
+                                {% if application.location %}
+                                    · {{ application.location }}
+                                {% endif %}
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            {% if application.status == "Offer" %}
+                                <span class="badge bg-success">
+                                    {{ application.status }}
+                                </span>
+
+                            {% elif application.status == "Rejected" %}
+                                <span class="badge bg-danger">
+                                    {{ application.status }}
+                                </span>
+
+                            {% elif application.status == "Interview" %}
+                                <span class="badge bg-warning text-dark">
+                                    {{ application.status }}
+                                </span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    {{ application.status }}
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    {% if application.applied_date %}
+                        <p>
+                            Applied:
+                            {{ application.applied_date.strftime("%d %b %Y") }}
+                        </p>
+                    {% endif %}
+
+
+                    {% if application.notes %}
+                        <p>
+                            {{ application.notes }}
+                        </p>
+                    {% endif %}
+
+
+                    <div style="margin-top:15px;">
+
+                        {% if application.job_url %}
+                            <a
+                                href="{{ application.job_url }}"
+                                target="_blank"
+                                class="btn btn-sm btn-outline-primary"
+                            >
+                                Job Posting
+                            </a>
+                        {% endif %}
+
+                        <a
+                            href="{{ url_for(
+                                'applications.edit_application',
+                                application_id=application.id
+                            ) }}"
+                            class="btn btn-sm btn-outline-secondary"
+                        >
+                            Edit
+                        </a>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'applications.delete_application',
+                                application_id=application.id
+                            ) }}"
+                            style="display:inline;"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Delete this application?');"
+                            >
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="text-center" style="padding:60px 20px;">
+
+            <h2>No applications yet</h2>
+
+            <p>
+                Start tracking your internship and job applications.
+            </p>
+
+            <a
+                href="{{ url_for('applications.add_application') }}"
+                class="btn btn-primary"
+            >
+                Add Your First Application
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

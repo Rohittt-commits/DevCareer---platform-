@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>Add Job Application</h1>
+
+    <p>Track a new internship or job opportunity.</p>
+
+
+    <form method="POST">
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Company
+            </label>
+
+            <input
+                type="text"
+                name="company"
+                class="form-control"
+                placeholder="e.g. Microsoft"
+                required
+            >
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Position
+            </label>
+
+            <input
+                type="text"
+                name="position"
+                class="form-control"
+                placeholder="e.g. Python Backend Intern"
+                required
+            >
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Job URL
+            </label>
+
+            <input
+                type="url"
+                name="job_url"
+                class="form-control"
+                placeholder="https://..."
+            >
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Location
+            </label>
+
+            <input
+                type="text"
+                name="location"
+                class="form-control"
+                placeholder="e.g. Pune / Remote"
+            >
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Status
+            </label>
+
+            <select name="status" class="form-select">
+
+                {% for status in statuses %}
+
+                    <option value="{{ status }}">
+                        {{ status }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Application Date
+            </label>
+
+            <input
+                type="date"
+                name="applied_date"
+                class="form-control"
+            >
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Notes
+            </label>
+
+            <textarea
+                name="notes"
+                class="form-control"
+                rows="4"
+                placeholder="Interview details, requirements, follow-up notes..."
+            ></textarea>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Save Application
+        </button>
+
+
+        <a
+            href="{{ url_for('applications.list_applications') }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

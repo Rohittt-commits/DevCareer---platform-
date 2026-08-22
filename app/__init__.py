@@ -25,6 +25,7 @@ def create_app():
 
     # Import User model
     from app.models.user import User
+    from app.models.application import JobApplication
     from app.models.skill import Skill
 
     # Flask-Login user loader
@@ -46,5 +47,8 @@ def create_app():
 
     from app.routes.skills import skills
     app.register_blueprint(skills)
+
+    from app.routes.applications import applications
+    app.register_blueprint(applications)
 
     return app
