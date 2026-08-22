@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Goal | DevCareer</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+
+            padding: 18px 40px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 750px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+
+            gap: 12px;
+        }
+
+        button,
+        .btn {
+            padding: 12px 18px;
+
+            border-radius: 7px;
+
+            border: none;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button {
+            background: #2563eb;
+
+            color: white;
+        }
+
+        .btn {
+            background: white;
+
+            color: #111827;
+
+            border: 1px solid #d1d5db;
+        }
+
+        .flash {
+            padding: 12px 16px;
+
+            margin-bottom: 20px;
+
+            background: #fef2f2;
+
+            color: #991b1b;
+
+            border-radius: 7px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+        DevCareer
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <div class="card">
+
+        <h1>
+            Create Career Goal
+        </h1>
+
+        <p class="subtitle">
+            Set a clear target and start tracking your progress.
+        </p>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form method="POST">
+
+
+            <label for="title">
+                Goal Title
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Example: Become a Python Backend Developer"
+                required
+            >
+
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                placeholder="Describe what you want to achieve..."
+            ></textarea>
+
+
+            <label for="category">
+                Category
+            </label>
+
+            <select
+                id="category"
+                name="category"
+            >
+
+                <option value="">
+                    Select category
+                </option>
+
+                <option value="Career">
+                    Career
+                </option>
+
+                <option value="Technical">
+                    Technical
+                </option>
+
+                <option value="Learning">
+                    Learning
+                </option>
+
+                <option value="Project">
+                    Project
+                </option>
+
+                <option value="Personal">
+                    Personal
+                </option>
+
+            </select>
+
+
+            <label for="target_date">
+                Target Date
+            </label>
+
+            <input
+                type="date"
+                id="target_date"
+                name="target_date"
+            >
+
+
+            <div class="actions">
+
+                <button type="submit">
+                    Create Goal
+                </button>
+
+                <a
+                    href="{{ url_for('goals.list_goals') }}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

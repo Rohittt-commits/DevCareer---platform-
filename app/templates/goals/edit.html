@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Goal | DevCareer</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #111827;
+
+            color: white;
+
+            padding: 18px 40px;
+        }
+
+        .brand {
+            font-size: 22px;
+
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 750px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+
+            gap: 12px;
+        }
+
+        button,
+        .btn {
+            padding: 12px 18px;
+
+            border-radius: 7px;
+
+            border: none;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button {
+            background: #2563eb;
+
+            color: white;
+        }
+
+        .btn {
+            background: white;
+
+            color: #111827;
+
+            border: 1px solid #d1d5db;
+        }
+
+        .flash {
+            padding: 12px 16px;
+
+            margin-bottom: 20px;
+
+            background: #fef2f2;
+
+            color: #991b1b;
+
+            border-radius: 7px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<nav class="navbar">
+
+    <div class="brand">
+        DevCareer
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <div class="card">
+
+
+        <h1>
+            Edit Goal
+        </h1>
+
+
+        <p class="subtitle">
+            Update your goal and track your latest progress.
+        </p>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form method="POST">
+
+
+            <label for="title">
+                Goal Title
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="{{ goal.title }}"
+                required
+            >
+
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+            >{{ goal.description or '' }}</textarea>
+
+
+            <label for="category">
+                Category
+            </label>
+
+            <select
+                id="category"
+                name="category"
+            >
+
+                <option value="">
+                    Select category
+                </option>
+
+                <option
+                    value="Career"
+                    {% if goal.category == "Career" %}selected{% endif %}
+                >
+                    Career
+                </option>
+
+                <option
+                    value="Technical"
+                    {% if goal.category == "Technical" %}selected{% endif %}
+                >
+                    Technical
+                </option>
+
+                <option
+                    value="Learning"
+                    {% if goal.category == "Learning" %}selected{% endif %}
+                >
+                    Learning
+                </option>
+
+                <option
+                    value="Project"
+                    {% if goal.category == "Project" %}selected{% endif %}
+                >
+                    Project
+                </option>
+
+                <option
+                    value="Personal"
+                    {% if goal.category == "Personal" %}selected{% endif %}
+                >
+                    Personal
+                </option>
+
+            </select>
+
+
+            <label for="status">
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option
+                    value="Not Started"
+                    {% if goal.status == "Not Started" %}selected{% endif %}
+                >
+                    Not Started
+                </option>
+
+                <option
+                    value="In Progress"
+                    {% if goal.status == "In Progress" %}selected{% endif %}
+                >
+                    In Progress
+                </option>
+
+                <option
+                    value="Completed"
+                    {% if goal.status == "Completed" %}selected{% endif %}
+                >
+                    Completed
+                </option>
+
+                <option
+                    value="Paused"
+                    {% if goal.status == "Paused" %}selected{% endif %}
+                >
+                    Paused
+                </option>
+
+            </select>
+
+
+            <label for="progress">
+                Progress (%)
+            </label>
+
+            <input
+                type="number"
+                id="progress"
+                name="progress"
+                min="0"
+                max="100"
+                value="{{ goal.progress }}"
+                required
+            >
+
+
+            <label for="target_date">
+                Target Date
+            </label>
+
+            <input
+                type="date"
+                id="target_date"
+                name="target_date"
+
+                {% if goal.target_date %}
+
+                    value="{{ goal.target_date.strftime('%Y-%m-%d') }}"
+
+                {% endif %}
+
+            >
+
+
+            <div class="actions">
+
+                <button type="submit">
+                    Save Changes
+                </button>
+
+
+                <a
+                    href="{{ url_for('goals.goal_detail', goal_id=goal.id) }}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</main>
+
+</body>
+
+</html>
