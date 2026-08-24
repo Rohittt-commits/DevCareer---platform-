@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Learning | DevCareer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Edit Learning</h1>
+
+    <form method="POST">
+
+        <label>Title *</label>
+        <input
+            type="text"
+            name="title"
+            value="{{ learning_item.title }}"
+            required
+        >
+
+        <label>Category</label>
+        <input
+            type="text"
+            name="category"
+            value="{{ learning_item.category or '' }}"
+        >
+
+        <label>Description</label>
+        <textarea name="description">{{ learning_item.description or '' }}</textarea>
+
+        <label>Resource URL</label>
+        <input
+            type="url"
+            name="resource_url"
+            value="{{ learning_item.resource_url or '' }}"
+        >
+
+        <label>Progress (%)</label>
+        <input
+            type="number"
+            name="progress"
+            min="0"
+            max="100"
+            value="{{ learning_item.progress }}"
+        >
+
+        <label>Status</label>
+        <select name="status">
+
+            <option
+                value="Not Started"
+                {% if learning_item.status == "Not Started" %}selected{% endif %}
+            >
+                Not Started
+            </option>
+
+            <option
+                value="In Progress"
+                {% if learning_item.status == "In Progress" %}selected{% endif %}
+            >
+                In Progress
+            </option>
+
+            <option
+                value="Completed"
+                {% if learning_item.status == "Completed" %}selected{% endif %}
+            >
+                Completed
+            </option>
+
+            <option
+                value="Paused"
+                {% if learning_item.status == "Paused" %}selected{% endif %}
+            >
+                Paused
+            </option>
+
+        </select>
+
+        <label>Start Date</label>
+        <input
+            type="date"
+            name="start_date"
+            value="{{ learning_item.start_date or '' }}"
+        >
+
+        <label>Completion Date</label>
+        <input
+            type="date"
+            name="completion_date"
+            value="{{ learning_item.completion_date or '' }}"
+        >
+
+        <label>Notes</label>
+        <textarea name="notes">{{ learning_item.notes or '' }}</textarea>
+
+        <button type="submit">
+            Update Learning
+        </button>
+
+    </form>
+
+    <a href="{{ url_for(
+        'learning.detail_learning',
+        learning_id=learning_item.id
+    ) }}">
+        ← Back
+    </a>
+
+</div>
+
+</body>
+</html>

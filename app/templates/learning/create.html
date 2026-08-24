@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Learning | DevCareer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Add Learning</h1>
+
+    <form method="POST">
+
+        <label>Title *</label>
+        <input
+            type="text"
+            name="title"
+            placeholder="e.g. Flask Backend Development"
+            required
+        >
+
+        <label>Category</label>
+        <input
+            type="text"
+            name="category"
+            placeholder="e.g. Python, Backend, Database"
+        >
+
+        <label>Description</label>
+        <textarea
+            name="description"
+            placeholder="What are you learning?"
+        ></textarea>
+
+        <label>Resource URL</label>
+        <input
+            type="url"
+            name="resource_url"
+            placeholder="https://..."
+        >
+
+        <label>Progress (%)</label>
+        <input
+            type="number"
+            name="progress"
+            min="0"
+            max="100"
+            value="0"
+        >
+
+        <label>Status</label>
+        <select name="status">
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Paused">Paused</option>
+        </select>
+
+        <label>Start Date</label>
+        <input type="date" name="start_date">
+
+        <label>Completion Date</label>
+        <input type="date" name="completion_date">
+
+        <label>Notes</label>
+        <textarea
+            name="notes"
+            placeholder="Add your learning notes..."
+        ></textarea>
+
+        <button type="submit">
+            Save Learning
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('learning.list_learning') }}">
+        ← Back to Learning
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ learning_item.title }} | DevCareer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .progress-container {
+            background: #e5e7eb;
+            height: 15px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            background: #2563eb;
+            height: 15px;
+            border-radius: 20px;
+        }
+
+        a {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>{{ learning_item.title }}</h1>
+
+        {% if learning_item.category %}
+            <p>
+                <strong>Category:</strong>
+                {{ learning_item.category }}
+            </p>
+        {% endif %}
+
+        <p>
+            <strong>Status:</strong>
+            {{ learning_item.status }}
+        </p>
+
+        <p>
+            <strong>Progress:</strong>
+            {{ learning_item.progress }}%
+        </p>
+
+        <div class="progress-container">
+            <div
+                class="progress-bar"
+                style="width: {{ learning_item.progress }}%;"
+            ></div>
+        </div>
+
+        {% if learning_item.description %}
+            <h3>Description</h3>
+            <p>{{ learning_item.description }}</p>
+        {% endif %}
+
+        {% if learning_item.resource_url %}
+            <p>
+                <strong>Resource:</strong>
+                <a
+                    href="{{ learning_item.resource_url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Open Resource
+                </a>
+            </p>
+        {% endif %}
+
+        {% if learning_item.start_date %}
+            <p>
+                <strong>Start Date:</strong>
+                {{ learning_item.start_date }}
+            </p>
+        {% endif %}
+
+        {% if learning_item.completion_date %}
+            <p>
+                <strong>Completion Date:</strong>
+                {{ learning_item.completion_date }}
+            </p>
+        {% endif %}
+
+        {% if learning_item.notes %}
+            <h3>Notes</h3>
+            <p>{{ learning_item.notes }}</p>
+        {% endif %}
+
+        <hr>
+
+        <a href="{{ url_for(
+            'learning.edit_learning',
+            learning_id=learning_item.id
+        ) }}">
+            Edit
+        </a>
+
+        <a href="{{ url_for('learning.list_learning') }}">
+            Back to Learning
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

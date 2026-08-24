@@ -4,6 +4,8 @@ from flask_login import login_required, current_user
 from app.models.project import Project
 from app.models.skill import Skill
 from app.models.application import JobApplication
+from app.models.goal import Goal
+from app.models.learning import Learning
 
 
 main = Blueprint("main", __name__)
@@ -13,9 +15,9 @@ main = Blueprint("main", __name__)
 @login_required
 def home():
 
-    # =========================
+    # ============================================================
     # PROJECT DATA
-    # =========================
+    # ============================================================
 
     projects = Project.query.filter_by(
         user_id=current_user.id
@@ -27,25 +29,25 @@ def home():
 
     completed_projects = sum(
         1 for project in projects
-        if project.status.lower() == "completed"
+        if project.status and project.status.lower() == "completed"
     )
 
     in_progress_projects = sum(
         1 for project in projects
-        if project.status.lower() == "in progress"
+        if project.status and project.status.lower() == "in progress"
     )
 
     planned_projects = sum(
         1 for project in projects
-        if project.status.lower() == "planned"
+        if project.status and project.status.lower() == "planned"
     )
 
     recent_projects = projects[:5]
 
 
-    # =========================
+    # ============================================================
     # SKILL DATA
-    # =========================
+    # ============================================================
 
     skills = Skill.query.filter_by(
         user_id=current_user.id
@@ -76,9 +78,9 @@ def home():
     top_skills = skills[:5]
 
 
-    # =========================
+    # ============================================================
     # APPLICATION DATA
-    # =========================
+    # ============================================================
 
     applications = JobApplication.query.filter_by(
         user_id=current_user.id
@@ -99,11 +101,8 @@ def home():
     }
 
     for application in applications:
-
         if application.status in application_pipeline:
-
             application_pipeline[application.status] += 1
-
 
     applied_count = (
         application_pipeline["Applied"]
@@ -114,18 +113,10 @@ def home():
     )
 
     interview_count = application_pipeline["Interview"]
-
     offer_count = application_pipeline["Offer"]
-
     rejected_count = application_pipeline["Rejected"]
 
-
-    # =========================
-    # APPLICATION METRICS
-    # =========================
-
     if applied_count > 0:
-
         interview_rate = round(
             (interview_count / applied_count) * 100,
             1
@@ -135,20 +126,90 @@ def home():
             (offer_count / applied_count) * 100,
             1
         )
-
     else:
-
         interview_rate = 0
-
         offer_rate = 0
-
 
     recent_applications = applications[:5]
 
 
-    # =========================
+    # ============================================================
+    # GOAL DATA
+    # ============================================================
+
+    goals = Goal.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Goal.updated_at.desc()
+    ).all()
+
+    goal_count = len(goals)
+
+    active_goals = [
+        goal for goal in goals
+        if goal.status not in ["Completed", "completed"]
+    ]
+
+    completed_goals = [
+        goal for goal in goals
+        if goal.status and goal.status.lower() == "completed"
+    ]
+
+    goal_completion_rate = round(
+        (len(completed_goals) / goal_count) * 100,
+        1
+    ) if goal_count else 0
+
+    average_goal_progress = round(
+        sum(goal.progress for goal in goals) / goal_count,
+        1
+    ) if goal_count else 0
+
+    recent_goals = goals[:5]
+
+    top_active_goals = active_goals[:5]
+
+
+    # ============================================================
+    # LEARNING DATA
+    # ============================================================
+
+    learning_items = Learning.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Learning.updated_at.desc()
+    ).all()
+
+    learning_count = len(learning_items)
+
+    active_learning = [
+        item for item in learning_items
+        if item.status not in ["Completed", "completed"]
+    ]
+
+    completed_learning = [
+        item for item in learning_items
+        if item.status and item.status.lower() == "completed"
+    ]
+
+    average_learning_progress = round(
+        sum(item.progress for item in learning_items) / learning_count,
+        1
+    ) if learning_count else 0
+
+    learning_completion_rate = round(
+        (len(completed_learning) / learning_count) * 100,
+        1
+    ) if learning_count else 0
+
+    recent_learning = learning_items[:5]
+
+    current_learning = active_learning[:5]
+
+
+    # ============================================================
     # CAREER SCORE
-    # =========================
+    # ============================================================
 
     project_score = min(
         project_count * 10,
@@ -182,9 +243,9 @@ def home():
     )
 
 
-    # =========================
+    # ============================================================
     # DASHBOARD
-    # =========================
+    # ============================================================
 
     return render_template(
         "dashboard.html",
@@ -216,6 +277,26 @@ def home():
         interview_rate=interview_rate,
         offer_rate=offer_rate,
         recent_applications=recent_applications,
+
+        # Goals
+        goals=goals,
+        goal_count=goal_count,
+        active_goals=active_goals,
+        completed_goals=completed_goals,
+        goal_completion_rate=goal_completion_rate,
+        average_goal_progress=average_goal_progress,
+        recent_goals=recent_goals,
+        top_active_goals=top_active_goals,
+
+        # Learning
+        learning_items=learning_items,
+        learning_count=learning_count,
+        active_learning=active_learning,
+        completed_learning=completed_learning,
+        average_learning_progress=average_learning_progress,
+        learning_completion_rate=learning_completion_rate,
+        recent_learning=recent_learning,
+        current_learning=current_learning,
 
         # Career
         career_score=career_score

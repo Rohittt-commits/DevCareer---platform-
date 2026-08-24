@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Tracker | DevCareer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header a {
+            text-decoration: none;
+            background: #111827;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-container {
+            background: #e5e7eb;
+            border-radius: 20px;
+            height: 12px;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 12px;
+            border-radius: 20px;
+            background: #2563eb;
+        }
+
+        .actions a,
+        .actions button {
+            margin-right: 8px;
+            padding: 7px 12px;
+            border-radius: 5px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .edit {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .view {
+            background: #2563eb;
+            color: white;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .flash {
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>Learning Tracker</h1>
+            <p>Track your learning journey and career progress.</p>
+        </div>
+
+        <a href="{{ url_for('learning.create_learning') }}">
+            + Add Learning
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if learning_items %}
+
+        {% for item in learning_items %}
+
+            <div class="card">
+
+                <h2>{{ item.title }}</h2>
+
+                {% if item.category %}
+                    <p><strong>Category:</strong> {{ item.category }}</p>
+                {% endif %}
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ item.status }}
+                </p>
+
+                <p>
+                    <strong>Progress:</strong>
+                    {{ item.progress }}%
+                </p>
+
+                <div class="progress-container">
+                    <div
+                        class="progress-bar"
+                        style="width: {{ item.progress }}%;"
+                    ></div>
+                </div>
+
+                {% if item.description %}
+                    <p>{{ item.description }}</p>
+                {% endif %}
+
+                <div class="actions">
+
+                    <a
+                        class="view"
+                        href="{{ url_for(
+                            'learning.detail_learning',
+                            learning_id=item.id
+                        ) }}"
+                    >
+                        View
+                    </a>
+
+                    <a
+                        class="edit"
+                        href="{{ url_for(
+                            'learning.edit_learning',
+                            learning_id=item.id
+                        ) }}"
+                    >
+                        Edit
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'learning.delete_learning',
+                            learning_id=item.id
+                        ) }}"
+                        style="display:inline;"
+                        onsubmit="return confirm('Delete this learning item?');"
+                    >
+                        <button class="delete" type="submit">
+                            Delete
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>No learning items yet</h2>
+
+            <p>
+                Start tracking what you're learning.
+            </p>
+
+            <a href="{{ url_for('learning.create_learning') }}">
+                Add Your First Learning Item
+            </a>
+
+        </div>
+
+    {% endif %}
+
+    <br>
+
+    <a href="{{ url_for('main.home') }}">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
