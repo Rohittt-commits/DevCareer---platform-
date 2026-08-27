@@ -7,6 +7,8 @@ from app.models.application import JobApplication
 from app.models.goal import Goal
 from app.models.learning import Learning
 
+from app.services.career_intelligence import generate_career_insights
+
 
 main = Blueprint("main", __name__)
 
@@ -28,18 +30,24 @@ def home():
     project_count = len(projects)
 
     completed_projects = sum(
-        1 for project in projects
-        if project.status and project.status.lower() == "completed"
+        1
+        for project in projects
+        if project.status
+        and project.status.lower() == "completed"
     )
 
     in_progress_projects = sum(
-        1 for project in projects
-        if project.status and project.status.lower() == "in progress"
+        1
+        for project in projects
+        if project.status
+        and project.status.lower() == "in progress"
     )
 
     planned_projects = sum(
-        1 for project in projects
-        if project.status and project.status.lower() == "planned"
+        1
+        for project in projects
+        if project.status
+        and project.status.lower() == "planned"
     )
 
     recent_projects = projects[:5]
@@ -58,19 +66,25 @@ def home():
     skill_count = len(skills)
 
     if skills:
+
         average_proficiency = round(
-            sum(skill.proficiency for skill in skills) / len(skills),
+            sum(
+                skill.proficiency
+                for skill in skills
+            ) / len(skills),
             1
         )
 
         strongest_skill = skills[0].name
 
         skills_needing_improvement = [
-            skill for skill in skills
+            skill
+            for skill in skills
             if skill.proficiency <= 2
         ]
 
     else:
+
         average_proficiency = 0
         strongest_skill = None
         skills_needing_improvement = []
@@ -101,8 +115,10 @@ def home():
     }
 
     for application in applications:
+
         if application.status in application_pipeline:
             application_pipeline[application.status] += 1
+
 
     applied_count = (
         application_pipeline["Applied"]
@@ -113,10 +129,18 @@ def home():
     )
 
     interview_count = application_pipeline["Interview"]
+
     offer_count = application_pipeline["Offer"]
+
     rejected_count = application_pipeline["Rejected"]
 
+
+    # ============================================================
+    # APPLICATION METRICS
+    # ============================================================
+
     if applied_count > 0:
+
         interview_rate = round(
             (interview_count / applied_count) * 100,
             1
@@ -126,9 +150,12 @@ def home():
             (offer_count / applied_count) * 100,
             1
         )
+
     else:
+
         interview_rate = 0
         offer_rate = 0
+
 
     recent_applications = applications[:5]
 
@@ -146,28 +173,34 @@ def home():
     goal_count = len(goals)
 
     active_goals = [
-        goal for goal in goals
-        if goal.status not in ["Completed", "completed"]
+        goal
+        for goal in goals
+        if not goal.status
+        or goal.status.lower() != "completed"
     ]
 
     completed_goals = [
-        goal for goal in goals
-        if goal.status and goal.status.lower() == "completed"
+        goal
+        for goal in goals
+        if goal.status
+        and goal.status.lower() == "completed"
     ]
 
-    goal_completion_rate = round(
-        (len(completed_goals) / goal_count) * 100,
-        1
-    ) if goal_count else 0
+    if active_goals:
 
-    average_goal_progress = round(
-        sum(goal.progress for goal in goals) / goal_count,
-        1
-    ) if goal_count else 0
+        average_goal_progress = round(
+            sum(
+                goal.progress
+                for goal in active_goals
+            ) / len(active_goals),
+            1
+        )
+
+    else:
+
+        average_goal_progress = 0
 
     recent_goals = goals[:5]
-
-    top_active_goals = active_goals[:5]
 
 
     # ============================================================
@@ -183,28 +216,34 @@ def home():
     learning_count = len(learning_items)
 
     active_learning = [
-        item for item in learning_items
-        if item.status not in ["Completed", "completed"]
+        item
+        for item in learning_items
+        if not item.status
+        or item.status.lower() != "completed"
     ]
 
     completed_learning = [
-        item for item in learning_items
-        if item.status and item.status.lower() == "completed"
+        item
+        for item in learning_items
+        if item.status
+        and item.status.lower() == "completed"
     ]
 
-    average_learning_progress = round(
-        sum(item.progress for item in learning_items) / learning_count,
-        1
-    ) if learning_count else 0
+    if active_learning:
 
-    learning_completion_rate = round(
-        (len(completed_learning) / learning_count) * 100,
-        1
-    ) if learning_count else 0
+        average_learning_progress = round(
+            sum(
+                item.progress
+                for item in active_learning
+            ) / len(active_learning),
+            1
+        )
+
+    else:
+
+        average_learning_progress = 0
 
     recent_learning = learning_items[:5]
-
-    current_learning = active_learning[:5]
 
 
     # ============================================================
@@ -240,6 +279,15 @@ def home():
     career_score = min(
         career_score,
         100
+    )
+
+
+    # ============================================================
+    # CAREER INTELLIGENCE
+    # ============================================================
+
+    career_insights = generate_career_insights(
+        current_user.id
     )
 
 
@@ -283,10 +331,8 @@ def home():
         goal_count=goal_count,
         active_goals=active_goals,
         completed_goals=completed_goals,
-        goal_completion_rate=goal_completion_rate,
         average_goal_progress=average_goal_progress,
         recent_goals=recent_goals,
-        top_active_goals=top_active_goals,
 
         # Learning
         learning_items=learning_items,
@@ -294,10 +340,11 @@ def home():
         active_learning=active_learning,
         completed_learning=completed_learning,
         average_learning_progress=average_learning_progress,
-        learning_completion_rate=learning_completion_rate,
         recent_learning=recent_learning,
-        current_learning=current_learning,
 
         # Career
-        career_score=career_score
+        career_score=career_score,
+
+        # Intelligence
+        career_insights=career_insights
     )
