@@ -1,3 +1,4 @@
+from app.services.github_service import GitHubService
 from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
 
@@ -193,3 +194,35 @@ def learning():
             for item in learning_items
         ]
     })
+
+@api.route("/github/profile")
+@login_required
+def github_profile():
+
+    github = GitHubService()
+
+    return jsonify(
+        github.get_profile()
+    )
+
+
+@api.route("/github/repositories")
+@login_required
+def github_repositories():
+
+    github = GitHubService()
+
+    return jsonify(
+        github.get_repositories()
+    )
+
+
+@api.route("/github/languages")
+@login_required
+def github_languages():
+
+    github = GitHubService()
+
+    return jsonify(
+        github.get_language_summary()
+    )

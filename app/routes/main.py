@@ -8,6 +8,7 @@ from app.models.goal import Goal
 from app.models.learning import Learning
 
 from app.services.career_intelligence import generate_career_insights
+from app.services.github_service import GitHubService
 
 
 main = Blueprint("main", __name__)
@@ -119,7 +120,6 @@ def home():
         if application.status in application_pipeline:
             application_pipeline[application.status] += 1
 
-
     applied_count = (
         application_pipeline["Applied"]
         + application_pipeline["Assessment"]
@@ -155,7 +155,6 @@ def home():
 
         interview_rate = 0
         offer_rate = 0
-
 
     recent_applications = applications[:5]
 
@@ -292,6 +291,52 @@ def home():
 
 
     # ============================================================
+    # GITHUB DATA
+    # ============================================================
+
+    github_service = GitHubService()
+
+    github_profile_result = github_service.get_profile()
+    github_repositories_result = github_service.get_repositories()
+    github_languages_result = github_service.get_language_summary()
+
+    if github_profile_result.get("success"):
+
+        github_profile = github_profile_result.get(
+            "profile",
+            {}
+        )
+
+    else:
+
+        github_profile = None
+
+    if github_repositories_result.get("success"):
+
+        github_repositories = github_repositories_result.get(
+            "repositories",
+            []
+        )
+
+    else:
+
+        github_repositories = []
+
+    if github_languages_result.get("success"):
+
+        github_languages = github_languages_result.get(
+            "languages",
+            []
+        )
+
+    else:
+
+        github_languages = []
+
+    github_connected = bool(github_profile)
+
+
+    # ============================================================
     # DASHBOARD
     # ============================================================
 
@@ -346,5 +391,11 @@ def home():
         career_score=career_score,
 
         # Intelligence
-        career_insights=career_insights
+        career_insights=career_insights,
+
+        # GitHub
+        github_connected=github_connected,
+        github_profile=github_profile,
+        github_repositories=github_repositories,
+        github_languages=github_languages
     )

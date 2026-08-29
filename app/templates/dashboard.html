@@ -59,6 +59,10 @@
             font-size: 14px;
         }
 
+        .navigation a:hover {
+            opacity: 0.85;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -186,7 +190,159 @@
             text-decoration: none;
         }
 
-        @media (max-width: 600px) {
+
+        /* ======================================================
+           GITHUB
+           ====================================================== */
+
+        .github-section {
+            border-left: 5px solid #24292f;
+        }
+
+        .github-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .github-header h2 {
+            margin: 0;
+        }
+
+        .github-badge {
+            background: #24292f;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .github-profile {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .github-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #eee;
+        }
+
+        .github-profile h3 {
+            margin: 0 0 5px;
+            font-size: 22px;
+        }
+
+        .github-profile p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .github-profile a {
+            color: #24292f;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .github-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .github-stat {
+            background: #f7f7f7;
+            border: 1px solid #e2e2e2;
+            padding: 15px;
+            border-radius: 9px;
+        }
+
+        .github-stat strong {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .github-stat span {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .github-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .github-box {
+            border: 1px solid #ddd;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .github-box h3 {
+            margin-top: 0;
+        }
+
+        .language-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .language {
+            background: #eee;
+            padding: 7px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .repo {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .repo:last-child {
+            border-bottom: none;
+        }
+
+        .repo a {
+            font-weight: bold;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .repo p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .repo-meta {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .github-empty {
+            background: #fafafa;
+            border: 1px dashed #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            color: #666;
+        }
+
+
+        @media (max-width: 700px) {
 
             .container {
                 width: 95%;
@@ -200,18 +356,38 @@
                 padding: 18px;
             }
 
+            .github-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .github-profile {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .github-avatar {
+                margin: auto;
+            }
+
+            .github-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
         }
 
     </style>
 </head>
 
+
 <body>
 
 <div class="container">
 
-    <!-- ====================================================== -->
-    <!-- HEADER -->
-    <!-- ====================================================== -->
+
+    <!-- ======================================================
+         HEADER
+         ====================================================== -->
 
     <div class="header">
 
@@ -254,9 +430,9 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- CAREER STATS -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         CAREER STATS
+         ====================================================== -->
 
     <div class="stats">
 
@@ -305,9 +481,286 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- CAREER INTELLIGENCE -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         GITHUB DEVELOPER PROFILE
+         ====================================================== -->
+
+    <div class="section github-section">
+
+        <div class="github-header">
+
+            <h2>🐙 GitHub Developer Profile</h2>
+
+            {% if github_connected %}
+                <span class="github-badge">
+                    CONNECTED
+                </span>
+            {% endif %}
+
+        </div>
+
+
+        {% if github_connected and github_profile %}
+
+
+            <!-- PROFILE -->
+
+            <div class="github-profile">
+
+                {% if github_profile.avatar_url %}
+
+                    <img
+                        class="github-avatar"
+                        src="{{ github_profile.avatar_url }}"
+                        alt="GitHub avatar">
+
+                {% endif %}
+
+
+                <div>
+
+                    <h3>
+                        {{ github_profile.name or github_profile.login }}
+                    </h3>
+
+                    <p>
+                        @{{ github_profile.login }}
+                    </p>
+
+                    {% if github_profile.bio %}
+
+                        <p>
+                            {{ github_profile.bio }}
+                        </p>
+
+                    {% endif %}
+
+                    {% if github_profile.html_url %}
+
+                        <a
+                            href="{{ github_profile.html_url }}"
+                            target="_blank"
+                            rel="noopener noreferrer">
+
+                            View GitHub Profile →
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- GITHUB STATS -->
+
+            <div class="github-stats">
+
+                <div class="github-stat">
+
+                    <strong>
+                        {{ github_profile.public_repos or 0 }}
+                    </strong>
+
+                    <span>
+                        Public Repositories
+                    </span>
+
+                </div>
+
+
+                <div class="github-stat">
+
+                    <strong>
+                        {{ github_profile.followers or 0 }}
+                    </strong>
+
+                    <span>
+                        Followers
+                    </span>
+
+                </div>
+
+
+                <div class="github-stat">
+
+                    <strong>
+                        {{ github_profile.following or 0 }}
+                    </strong>
+
+                    <span>
+                        Following
+                    </span>
+
+                </div>
+
+
+                <div class="github-stat">
+
+                    <strong>
+                        {{ github_repositories|length }}
+                    </strong>
+
+                    <span>
+                        Loaded Repositories
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- LANGUAGES + REPOSITORIES -->
+
+            <div class="github-columns">
+
+
+                <!-- LANGUAGES -->
+
+                <div class="github-box">
+
+                    <h3>
+                        💻 Top Languages
+                    </h3>
+
+                    {% if github_languages %}
+
+                        <div class="language-list">
+
+                            {% for language in github_languages[:10] %}
+
+                                <span class="language">
+
+                                    {% if language is mapping %}
+
+                                        {{ language.name }}
+
+                                    {% else %}
+
+                                        {{ language }}
+
+                                    {% endif %}
+
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <p class="empty">
+                            No language data available yet.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- RECENT REPOSITORIES -->
+
+                <div class="github-box">
+
+                    <h3>
+                        📁 Recent Repositories
+                    </h3>
+
+                    {% if github_repositories %}
+
+                        {% for repository in github_repositories[:5] %}
+
+                            <div class="repo">
+
+                                {% if repository.html_url %}
+
+                                    <a
+                                        href="{{ repository.html_url }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+
+                                        {{ repository.name }}
+
+                                    </a>
+
+                                {% else %}
+
+                                    <strong>
+                                        {{ repository.name }}
+                                    </strong>
+
+                                {% endif %}
+
+
+                                {% if repository.description %}
+
+                                    <p>
+                                        {{ repository.description }}
+                                    </p>
+
+                                {% endif %}
+
+
+                                <div class="repo-meta">
+
+                                    ⭐ {{ repository.stargazers_count or 0 }}
+
+                                    &nbsp; • &nbsp;
+
+                                    🍴 {{ repository.forks_count or 0 }}
+
+                                    {% if repository.language %}
+
+                                        &nbsp; • &nbsp;
+
+                                        {{ repository.language }}
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="empty">
+                            No public repositories found.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+        {% else %}
+
+            <div class="github-empty">
+
+                <strong>
+                    GitHub profile unavailable.
+                </strong>
+
+                <p>
+                    DevCareer couldn't retrieve your GitHub information
+                    right now. Your dashboard and other career data
+                    are still working normally.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ======================================================
+         CAREER INTELLIGENCE
+         ====================================================== -->
 
     <div class="section intelligence">
 
@@ -356,15 +809,16 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- CAREER OVERVIEW -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         CAREER OVERVIEW
+         ====================================================== -->
 
     <div class="section">
 
         <h2>📊 Career Overview</h2>
 
         <div class="overview-grid">
+
 
             <!-- PROJECTS -->
 
@@ -543,9 +997,9 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- RECENT PROJECTS -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         RECENT PROJECTS
+         ====================================================== -->
 
     <div class="section">
 
@@ -582,9 +1036,9 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- RECENT APPLICATIONS -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         RECENT APPLICATIONS
+         ====================================================== -->
 
     <div class="section">
 
@@ -623,9 +1077,9 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- RECENT GOALS -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         RECENT GOALS
+         ====================================================== -->
 
     <div class="section">
 
@@ -664,9 +1118,9 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- RECENT LEARNING -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         RECENT LEARNING
+         ====================================================== -->
 
     <div class="section">
 
@@ -705,9 +1159,9 @@
     </div>
 
 
-    <!-- ====================================================== -->
-    <!-- ACCOUNT -->
-    <!-- ====================================================== -->
+    <!-- ======================================================
+         ACCOUNT
+         ====================================================== -->
 
     <div class="section">
 
