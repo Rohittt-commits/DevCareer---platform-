@@ -1,1191 +1,697 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Dashboard | DevCareer{% endblock %}
 
-    <title>Dashboard | DevCareer</title>
+{% block content %}
 
-    <style>
+<style>
+    .dashboard-container {
+        width: 92%;
+        max-width: 1200px;
+        margin: 35px auto;
+    }
 
-        * {
-            box-sizing: border-box;
+    .dashboard-header,
+    .section,
+    .stat-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .dashboard-header {
+        padding: 28px;
+        margin-bottom: 22px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 32px;
+        margin-bottom: 6px;
+    }
+
+    .dashboard-header p,
+    .section-description {
+        color: #6b7280;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .stat-card {
+        padding: 21px;
+    }
+
+    .stat-card h3 {
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 7px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .section {
+        padding: 24px;
+        margin-bottom: 22px;
+    }
+
+    .section h2 {
+        margin-bottom: 8px;
+        font-size: 22px;
+    }
+
+    .intelligence {
+        border-left: 5px solid #2563eb;
+    }
+
+    .insight {
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        padding: 17px;
+        border-radius: 10px;
+        margin-top: 12px;
+    }
+
+    .insight-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .insight h3 {
+        font-size: 16px;
+    }
+
+    .priority {
+        font-size: 11px;
+        font-weight: 800;
+        padding: 5px 9px;
+        border-radius: 20px;
+        background: #e5e7eb;
+    }
+
+    .insight p {
+        color: #4b5563;
+        margin-top: 8px;
+    }
+
+    .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .overview-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 11px;
+        padding: 19px;
+    }
+
+    .overview-card h3 {
+        margin-bottom: 12px;
+        font-size: 17px;
+    }
+
+    .overview-card p {
+        margin: 7px 0;
+        color: #4b5563;
+    }
+
+    .overview-card strong {
+        color: #111827;
+    }
+
+    .progress-container {
+        background: #e5e7eb;
+        height: 9px;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 12px;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: #2563eb;
+        border-radius: 20px;
+    }
+
+    .item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .item:last-child {
+        border-bottom: none;
+    }
+
+    .item small {
+        color: #6b7280;
+    }
+
+    .empty {
+        color: #9ca3af;
+        padding: 10px 0;
+    }
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .profile-item {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 9px;
+        padding: 15px;
+    }
+
+    .profile-item a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .profile-item a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+        .dashboard-container {
+            width: 94%;
+            margin-top: 25px;
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
+        .dashboard-header {
+            padding: 21px;
         }
 
-        .container {
-            width: 92%;
-            max-width: 1200px;
-            margin: 30px auto;
-        }
-
-        .header {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .header h1 {
-            margin: 0 0 8px;
-        }
-
-        .header p {
-            margin: 0;
-            color: #666;
-        }
-
-        .navigation {
-            margin-top: 18px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .navigation a {
-            text-decoration: none;
-            background: #222;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 7px;
-            font-size: 14px;
-        }
-
-        .navigation a:hover {
-            opacity: 0.85;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .stat-card h3 {
-            margin: 0 0 8px;
-            font-size: 15px;
-            color: #666;
-        }
-
-        .stat-number {
-            font-size: 30px;
-            font-weight: bold;
+        .dashboard-header h1 {
+            font-size: 26px;
         }
 
         .section {
-            background: white;
-            padding: 22px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .section h2 {
-            margin-top: 0;
-        }
-
-        .intelligence {
-            border-left: 5px solid #222;
-        }
-
-        .insight {
-            border: 1px solid #ddd;
-            padding: 16px;
-            border-radius: 9px;
-            margin-bottom: 12px;
-            background: #fafafa;
-        }
-
-        .insight:last-child {
-            margin-bottom: 0;
+            padding: 20px;
         }
 
         .insight-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
+            align-items: flex-start;
+            flex-direction: column;
         }
+    }
+</style>
 
-        .insight h3 {
-            margin: 0;
-        }
+<div class="dashboard-container">
 
-        .priority {
-            font-size: 12px;
-            font-weight: bold;
-            padding: 5px 9px;
-            border-radius: 20px;
-            background: #eee;
-        }
+<!-- HEADER -->
 
-        .insight p {
-            margin-bottom: 0;
-            color: #555;
-            line-height: 1.5;
-        }
+<div class="dashboard-header">
 
-        .overview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
+    <h1>
+        Welcome back, {{ current_user.username }}!
+    </h1>
 
-        .overview-card {
-            border: 1px solid #ddd;
-            padding: 18px;
-            border-radius: 10px;
-        }
+    <p>
+        Your developer career command center.
+        Track your progress, applications, skills,
+        goals and learning in one place.
+    </p>
 
-        .overview-card h3 {
-            margin-top: 0;
-        }
-
-        .progress-container {
-            background: #e5e5e5;
-            height: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: #222;
-        }
-
-        .item {
-            border-bottom: 1px solid #eee;
-            padding: 12px 0;
-        }
-
-        .item:last-child {
-            border-bottom: none;
-        }
-
-        .empty {
-            color: #777;
-        }
-
-        .logout {
-            display: inline-block;
-            margin-top: 5px;
-            color: #b00020;
-            text-decoration: none;
-        }
+</div>
 
 
-        /* ======================================================
-           GITHUB
-           ====================================================== */
+<!-- CAREER STATS -->
 
-        .github-section {
-            border-left: 5px solid #24292f;
-        }
+<div class="stats-grid">
 
-        .github-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+    <div class="stat-card">
+        <h3>Career Score</h3>
+        <div class="stat-number">
+            {{ career_score }}/100
+        </div>
+    </div>
 
-        .github-header h2 {
-            margin: 0;
-        }
+    <div class="stat-card">
+        <h3>Projects</h3>
+        <div class="stat-number">
+            {{ project_count }}
+        </div>
+    </div>
 
-        .github-badge {
-            background: #24292f;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
+    <div class="stat-card">
+        <h3>Skills</h3>
+        <div class="stat-number">
+            {{ skill_count }}
+        </div>
+    </div>
 
-        .github-profile {
-            display: grid;
-            grid-template-columns: 90px 1fr;
-            gap: 20px;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    <div class="stat-card">
+        <h3>Applications</h3>
+        <div class="stat-number">
+            {{ application_count }}
+        </div>
+    </div>
 
-        .github-avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #eee;
-        }
+    <div class="stat-card">
+        <h3>Goals</h3>
+        <div class="stat-number">
+            {{ goal_count }}
+        </div>
+    </div>
 
-        .github-profile h3 {
-            margin: 0 0 5px;
-            font-size: 22px;
-        }
+    <div class="stat-card">
+        <h3>Learning</h3>
+        <div class="stat-number">
+            {{ learning_count }}
+        </div>
+    </div>
 
-        .github-profile p {
-            margin: 5px 0;
-            color: #666;
-        }
-
-        .github-profile a {
-            color: #24292f;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .github-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .github-stat {
-            background: #f7f7f7;
-            border: 1px solid #e2e2e2;
-            padding: 15px;
-            border-radius: 9px;
-        }
-
-        .github-stat strong {
-            display: block;
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        .github-stat span {
-            color: #666;
-            font-size: 13px;
-        }
-
-        .github-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .github-box {
-            border: 1px solid #ddd;
-            padding: 18px;
-            border-radius: 10px;
-        }
-
-        .github-box h3 {
-            margin-top: 0;
-        }
-
-        .language-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .language {
-            background: #eee;
-            padding: 7px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        .repo {
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .repo:last-child {
-            border-bottom: none;
-        }
-
-        .repo a {
-            font-weight: bold;
-            color: #222;
-            text-decoration: none;
-        }
-
-        .repo p {
-            margin: 5px 0;
-            color: #666;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .repo-meta {
-            font-size: 12px;
-            color: #777;
-        }
-
-        .github-empty {
-            background: #fafafa;
-            border: 1px dashed #ccc;
-            padding: 20px;
-            border-radius: 10px;
-            color: #666;
-        }
+</div>
 
 
-        @media (max-width: 700px) {
+<!-- CAREER INTELLIGENCE -->
 
-            .container {
-                width: 95%;
-            }
+<div class="section intelligence">
 
-            .header {
-                padding: 18px;
-            }
+    <h2>Career Intelligence</h2>
 
-            .section {
-                padding: 18px;
-            }
+    <p class="section-description">
+        DevCareer analyzes your career data and gives you
+        actionable recommendations.
+    </p>
 
-            .github-columns {
-                grid-template-columns: 1fr;
-            }
+    {% if career_insights %}
 
-            .github-profile {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
+        {% for insight in career_insights %}
 
-            .github-avatar {
-                margin: auto;
-            }
+            <div class="insight">
 
-            .github-header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
+                <div class="insight-header">
 
-        }
+                    <h3>
+                        {{ insight.title }}
+                    </h3>
 
-    </style>
-</head>
+                    <span class="priority">
+                        {{ insight.priority|upper }}
+                    </span>
 
+                </div>
 
-<body>
+                <p>
+                    {{ insight.message }}
+                </p>
 
-<div class="container">
+            </div>
 
+        {% endfor %}
 
-    <!-- ======================================================
-         HEADER
-         ====================================================== -->
+    {% else %}
 
-    <div class="header">
-
-        <h1>
-            Welcome to DevCareer, {{ current_user.username }}! 🚀
-        </h1>
-
-        <p>
-            Your personal developer career management dashboard.
+        <p class="empty">
+            Add projects, skills, applications, goals or
+            learning activities to generate career insights.
         </p>
 
-        <div class="navigation">
+    {% endif %}
 
-            <a href="{{ url_for('main.home') }}">
-                Dashboard
-            </a>
-
-            <a href="{{ url_for('projects.list_projects') }}">
-                Projects
-            </a>
-
-            <a href="{{ url_for('skills.list_skills') }}">
-                Skills
-            </a>
-
-            <a href="{{ url_for('applications.list_applications') }}">
-                Applications
-            </a>
-
-            <a href="{{ url_for('goals.list_goals') }}">
-                Goals
-            </a>
-
-            <a href="{{ url_for('learning.list_learning') }}">
-                Learning
-            </a>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <!-- ======================================================
-         CAREER STATS
-         ====================================================== -->
+<!-- CAREER OVERVIEW -->
 
-    <div class="stats">
+<div class="section">
 
-        <div class="stat-card">
-            <h3>Career Score</h3>
-            <div class="stat-number">
-                {{ career_score }}/100
-            </div>
-        </div>
+    <h2>Career Overview</h2>
 
-        <div class="stat-card">
+    <p class="section-description">
+        A quick overview of your current career progress.
+    </p>
+
+    <div class="overview-grid">
+
+        <div class="overview-card">
+
             <h3>Projects</h3>
-            <div class="stat-number">
-                {{ project_count }}
-            </div>
+
+            <p>
+                Completed:
+                <strong>{{ completed_projects }}</strong>
+            </p>
+
+            <p>
+                In Progress:
+                <strong>{{ in_progress_projects }}</strong>
+            </p>
+
+            <p>
+                Planned:
+                <strong>{{ planned_projects }}</strong>
+            </p>
+
         </div>
 
-        <div class="stat-card">
+
+        <div class="overview-card">
+
             <h3>Skills</h3>
-            <div class="stat-number">
-                {{ skill_count }}
-            </div>
-        </div>
 
-        <div class="stat-card">
-            <h3>Applications</h3>
-            <div class="stat-number">
-                {{ application_count }}
-            </div>
-        </div>
+            <p>
+                Average Proficiency:
+                <strong>{{ average_proficiency }}/5</strong>
+            </p>
 
-        <div class="stat-card">
-            <h3>Goals</h3>
-            <div class="stat-number">
-                {{ goal_count }}
-            </div>
-        </div>
+            {% if strongest_skill %}
 
-        <div class="stat-card">
-            <h3>Learning</h3>
-            <div class="stat-number">
-                {{ learning_count }}
-            </div>
-        </div>
+                <p>
+                    Strongest Skill:
+                    <strong>{{ strongest_skill }}</strong>
+                </p>
 
-    </div>
-
-
-    <!-- ======================================================
-         GITHUB DEVELOPER PROFILE
-         ====================================================== -->
-
-    <div class="section github-section">
-
-        <div class="github-header">
-
-            <h2>🐙 GitHub Developer Profile</h2>
-
-            {% if github_connected %}
-                <span class="github-badge">
-                    CONNECTED
-                </span>
             {% endif %}
 
-        </div>
-
-
-        {% if github_connected and github_profile %}
-
-
-            <!-- PROFILE -->
-
-            <div class="github-profile">
-
-                {% if github_profile.avatar_url %}
-
-                    <img
-                        class="github-avatar"
-                        src="{{ github_profile.avatar_url }}"
-                        alt="GitHub avatar">
-
-                {% endif %}
-
-
-                <div>
-
-                    <h3>
-                        {{ github_profile.name or github_profile.login }}
-                    </h3>
-
-                    <p>
-                        @{{ github_profile.login }}
-                    </p>
-
-                    {% if github_profile.bio %}
-
-                        <p>
-                            {{ github_profile.bio }}
-                        </p>
-
-                    {% endif %}
-
-                    {% if github_profile.html_url %}
-
-                        <a
-                            href="{{ github_profile.html_url }}"
-                            target="_blank"
-                            rel="noopener noreferrer">
-
-                            View GitHub Profile →
-
-                        </a>
-
-                    {% endif %}
-
-                </div>
-
-            </div>
-
-
-            <!-- GITHUB STATS -->
-
-            <div class="github-stats">
-
-                <div class="github-stat">
-
-                    <strong>
-                        {{ github_profile.public_repos or 0 }}
-                    </strong>
-
-                    <span>
-                        Public Repositories
-                    </span>
-
-                </div>
-
-
-                <div class="github-stat">
-
-                    <strong>
-                        {{ github_profile.followers or 0 }}
-                    </strong>
-
-                    <span>
-                        Followers
-                    </span>
-
-                </div>
-
-
-                <div class="github-stat">
-
-                    <strong>
-                        {{ github_profile.following or 0 }}
-                    </strong>
-
-                    <span>
-                        Following
-                    </span>
-
-                </div>
-
-
-                <div class="github-stat">
-
-                    <strong>
-                        {{ github_repositories|length }}
-                    </strong>
-
-                    <span>
-                        Loaded Repositories
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- LANGUAGES + REPOSITORIES -->
-
-            <div class="github-columns">
-
-
-                <!-- LANGUAGES -->
-
-                <div class="github-box">
-
-                    <h3>
-                        💻 Top Languages
-                    </h3>
-
-                    {% if github_languages %}
-
-                        <div class="language-list">
-
-                            {% for language in github_languages[:10] %}
-
-                                <span class="language">
-
-                                    {% if language is mapping %}
-
-                                        {{ language.name }}
-
-                                    {% else %}
-
-                                        {{ language }}
-
-                                    {% endif %}
-
-                                </span>
-
-                            {% endfor %}
-
-                        </div>
-
-                    {% else %}
-
-                        <p class="empty">
-                            No language data available yet.
-                        </p>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- RECENT REPOSITORIES -->
-
-                <div class="github-box">
-
-                    <h3>
-                        📁 Recent Repositories
-                    </h3>
-
-                    {% if github_repositories %}
-
-                        {% for repository in github_repositories[:5] %}
-
-                            <div class="repo">
-
-                                {% if repository.html_url %}
-
-                                    <a
-                                        href="{{ repository.html_url }}"
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-
-                                        {{ repository.name }}
-
-                                    </a>
-
-                                {% else %}
-
-                                    <strong>
-                                        {{ repository.name }}
-                                    </strong>
-
-                                {% endif %}
-
-
-                                {% if repository.description %}
-
-                                    <p>
-                                        {{ repository.description }}
-                                    </p>
-
-                                {% endif %}
-
-
-                                <div class="repo-meta">
-
-                                    ⭐ {{ repository.stargazers_count or 0 }}
-
-                                    &nbsp; • &nbsp;
-
-                                    🍴 {{ repository.forks_count or 0 }}
-
-                                    {% if repository.language %}
-
-                                        &nbsp; • &nbsp;
-
-                                        {{ repository.language }}
-
-                                    {% endif %}
-
-                                </div>
-
-                            </div>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <p class="empty">
-                            No public repositories found.
-                        </p>
-
-                    {% endif %}
-
-                </div>
-
-            </div>
-
-
-        {% else %}
-
-            <div class="github-empty">
-
+            <p>
+                Needs Improvement:
                 <strong>
-                    GitHub profile unavailable.
+                    {{ skills_needing_improvement|length }}
                 </strong>
-
-                <p>
-                    DevCareer couldn't retrieve your GitHub information
-                    right now. Your dashboard and other career data
-                    are still working normally.
-                </p>
-
-            </div>
-
-        {% endif %}
-
-    </div>
-
-
-    <!-- ======================================================
-         CAREER INTELLIGENCE
-         ====================================================== -->
-
-    <div class="section intelligence">
-
-        <h2>🧠 Career Intelligence</h2>
-
-        <p>
-            DevCareer analyzes your career data and gives you
-            actionable recommendations.
-        </p>
-
-        {% if career_insights %}
-
-            {% for insight in career_insights %}
-
-                <div class="insight">
-
-                    <div class="insight-header">
-
-                        <h3>
-                            {{ insight.title }}
-                        </h3>
-
-                        <span class="priority">
-                            {{ insight.priority|upper }}
-                        </span>
-
-                    </div>
-
-                    <p>
-                        {{ insight.message }}
-                    </p>
-
-                </div>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p class="empty">
-                Add projects, skills, applications, goals or
-                learning activities to generate career insights.
             </p>
 
-        {% endif %}
-
-    </div>
+        </div>
 
 
-    <!-- ======================================================
-         CAREER OVERVIEW
-         ====================================================== -->
+        <div class="overview-card">
 
-    <div class="section">
+            <h3>Applications</h3>
 
-        <h2>📊 Career Overview</h2>
+            <p>
+                Interview Rate:
+                <strong>{{ interview_rate }}%</strong>
+            </p>
 
-        <div class="overview-grid">
+            <p>
+                Offer Rate:
+                <strong>{{ offer_rate }}%</strong>
+            </p>
 
+            <p>
+                Interviews:
+                <strong>{{ interview_count }}</strong>
+            </p>
 
-            <!-- PROJECTS -->
+            <p>
+                Offers:
+                <strong>{{ offer_count }}</strong>
+            </p>
 
-            <div class="overview-card">
-
-                <h3>Projects</h3>
-
-                <p>
-                    Completed:
-                    <strong>{{ completed_projects }}</strong>
-                </p>
-
-                <p>
-                    In Progress:
-                    <strong>{{ in_progress_projects }}</strong>
-                </p>
-
-                <p>
-                    Planned:
-                    <strong>{{ planned_projects }}</strong>
-                </p>
-
-            </div>
+        </div>
 
 
-            <!-- SKILLS -->
+        <div class="overview-card">
 
-            <div class="overview-card">
+            <h3>Goals</h3>
 
-                <h3>Skills</h3>
+            <p>
+                Active:
+                <strong>{{ active_goals|length }}</strong>
+            </p>
 
-                <p>
-                    Average Proficiency:
-                    <strong>
-                        {{ average_proficiency }}/5
-                    </strong>
-                </p>
+            <p>
+                Completed:
+                <strong>{{ completed_goals|length }}</strong>
+            </p>
 
-                {% if strongest_skill %}
+            <p>
+                Average Progress:
+                <strong>{{ average_goal_progress }}%</strong>
+            </p>
 
-                    <p>
-                        Strongest Skill:
-                        <strong>
-                            {{ strongest_skill }}
-                        </strong>
-                    </p>
-
-                {% endif %}
-
-                <p>
-                    Skills Needing Improvement:
-                    <strong>
-                        {{ skills_needing_improvement|length }}
-                    </strong>
-                </p>
-
-            </div>
-
-
-            <!-- APPLICATIONS -->
-
-            <div class="overview-card">
-
-                <h3>Applications</h3>
-
-                <p>
-                    Interview Rate:
-                    <strong>
-                        {{ interview_rate }}%
-                    </strong>
-                </p>
-
-                <p>
-                    Offer Rate:
-                    <strong>
-                        {{ offer_rate }}%
-                    </strong>
-                </p>
-
-                <p>
-                    Interviews:
-                    <strong>
-                        {{ interview_count }}
-                    </strong>
-                </p>
-
-                <p>
-                    Offers:
-                    <strong>
-                        {{ offer_count }}
-                    </strong>
-                </p>
-
-            </div>
-
-
-            <!-- GOALS -->
-
-            <div class="overview-card">
-
-                <h3>Goals</h3>
-
-                <p>
-                    Active:
-                    <strong>
-                        {{ active_goals|length }}
-                    </strong>
-                </p>
-
-                <p>
-                    Completed:
-                    <strong>
-                        {{ completed_goals|length }}
-                    </strong>
-                </p>
-
-                <p>
-                    Average Progress:
-                    <strong>
-                        {{ average_goal_progress }}%
-                    </strong>
-                </p>
-
-                <div class="progress-container">
-
-                    <div
-                        class="progress-bar"
-                        style="width: {{ average_goal_progress }}%;">
-                    </div>
-
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ average_goal_progress }}%;">
                 </div>
-
-            </div>
-
-
-            <!-- LEARNING -->
-
-            <div class="overview-card">
-
-                <h3>Learning</h3>
-
-                <p>
-                    Active:
-                    <strong>
-                        {{ active_learning|length }}
-                    </strong>
-                </p>
-
-                <p>
-                    Completed:
-                    <strong>
-                        {{ completed_learning|length }}
-                    </strong>
-                </p>
-
-                <p>
-                    Average Progress:
-                    <strong>
-                        {{ average_learning_progress }}%
-                    </strong>
-                </p>
-
-                <div class="progress-container">
-
-                    <div
-                        class="progress-bar"
-                        style="width: {{ average_learning_progress }}%;">
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
 
-    </div>
 
+        <div class="overview-card">
 
-    <!-- ======================================================
-         RECENT PROJECTS
-         ====================================================== -->
+            <h3>Learning</h3>
 
-    <div class="section">
-
-        <h2>🚀 Recent Projects</h2>
-
-        {% if recent_projects %}
-
-            {% for project in recent_projects %}
-
-                <div class="item">
-
-                    <strong>
-                        {{ project.title }}
-                    </strong>
-
-                    <br>
-
-                    <small>
-                        Status: {{ project.status }}
-                    </small>
-
-                </div>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p class="empty">
-                No projects added yet.
+            <p>
+                Active:
+                <strong>{{ active_learning|length }}</strong>
             </p>
 
-        {% endif %}
-
-    </div>
-
-
-    <!-- ======================================================
-         RECENT APPLICATIONS
-         ====================================================== -->
-
-    <div class="section">
-
-        <h2>💼 Recent Applications</h2>
-
-        {% if recent_applications %}
-
-            {% for application in recent_applications %}
-
-                <div class="item">
-
-                    <strong>
-                        {{ application.company }}
-                    </strong>
-
-                    — {{ application.position }}
-
-                    <br>
-
-                    <small>
-                        Status: {{ application.status }}
-                    </small>
-
-                </div>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p class="empty">
-                No applications added yet.
+            <p>
+                Completed:
+                <strong>{{ completed_learning|length }}</strong>
             </p>
 
-        {% endif %}
-
-    </div>
-
-
-    <!-- ======================================================
-         RECENT GOALS
-         ====================================================== -->
-
-    <div class="section">
-
-        <h2>🎯 Recent Goals</h2>
-
-        {% if recent_goals %}
-
-            {% for goal in recent_goals %}
-
-                <div class="item">
-
-                    <strong>
-                        {{ goal.title }}
-                    </strong>
-
-                    — {{ goal.progress }}%
-
-                    <br>
-
-                    <small>
-                        Status: {{ goal.status }}
-                    </small>
-
-                </div>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p class="empty">
-                No goals added yet.
+            <p>
+                Average Progress:
+                <strong>{{ average_learning_progress }}%</strong>
             </p>
 
-        {% endif %}
-
-    </div>
-
-
-    <!-- ======================================================
-         RECENT LEARNING
-         ====================================================== -->
-
-    <div class="section">
-
-        <h2>📚 Recent Learning</h2>
-
-        {% if recent_learning %}
-
-            {% for item in recent_learning %}
-
-                <div class="item">
-
-                    <strong>
-                        {{ item.title }}
-                    </strong>
-
-                    — {{ item.progress }}%
-
-                    <br>
-
-                    <small>
-                        Status: {{ item.status }}
-                    </small>
-
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ average_learning_progress }}%;">
                 </div>
+            </div>
 
-            {% endfor %}
-
-        {% else %}
-
-            <p class="empty">
-                No learning items added yet.
-            </p>
-
-        {% endif %}
-
-    </div>
-
-
-    <!-- ======================================================
-         ACCOUNT
-         ====================================================== -->
-
-    <div class="section">
-
-        <h2>Your Profile</h2>
-
-        <p>
-            <strong>Username:</strong>
-            {{ current_user.username }}
-        </p>
-
-        <p>
-            <strong>Email:</strong>
-            {{ current_user.email }}
-        </p>
-
-        <a
-            class="logout"
-            href="{{ url_for('auth.logout') }}">
-            Logout
-        </a>
+        </div>
 
     </div>
 
 </div>
 
-</body>
-</html>
+
+<!-- RECENT PROJECTS -->
+
+<div class="section">
+
+    <h2>Recent Projects</h2>
+
+    {% if recent_projects %}
+
+        {% for project in recent_projects %}
+
+            <div class="item">
+
+                <strong>
+                    {{ project.title }}
+                </strong>
+
+                <br>
+
+                <small>
+                    Status: {{ project.status }}
+                </small>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p class="empty">
+            No projects added yet.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<!-- RECENT APPLICATIONS -->
+
+<div class="section">
+
+    <h2>Recent Applications</h2>
+
+    {% if recent_applications %}
+
+        {% for application in recent_applications %}
+
+            <div class="item">
+
+                <strong>
+                    {{ application.company }}
+                </strong>
+
+                — {{ application.position }}
+
+                <br>
+
+                <small>
+                    Status: {{ application.status }}
+                </small>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p class="empty">
+            No applications added yet.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<!-- RECENT GOALS -->
+
+<div class="section">
+
+    <h2>Recent Goals</h2>
+
+    {% if recent_goals %}
+
+        {% for goal in recent_goals %}
+
+            <div class="item">
+
+                <strong>
+                    {{ goal.title }}
+                </strong>
+
+                — {{ goal.progress }}%
+
+                <br>
+
+                <small>
+                    Status: {{ goal.status }}
+                </small>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p class="empty">
+            No goals added yet.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<!-- RECENT LEARNING -->
+
+<div class="section">
+
+    <h2>Recent Learning</h2>
+
+    {% if recent_learning %}
+
+        {% for item in recent_learning %}
+
+            <div class="item">
+
+                <strong>
+                    {{ item.title }}
+                </strong>
+
+                — {{ item.progress }}%
+
+                <br>
+
+                <small>
+                    Status: {{ item.status }}
+                </small>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p class="empty">
+            No learning items added yet.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="section">
+
+    <h2>Your Profile</h2>
+
+    <div class="profile-grid">
+
+        <div class="profile-item">
+
+            <strong>Username</strong>
+
+            <br>
+
+            {{ current_user.username }}
+
+        </div>
+
+
+        <div class="profile-item">
+
+            <strong>Email</strong>
+
+            <br>
+
+            {{ current_user.email }}
+
+        </div>
+
+
+        <div class="profile-item">
+
+            <strong>GitHub</strong>
+
+            <br>
+
+            {% if current_user.github_url %}
+
+                <a
+                    href="{{ current_user.github_url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    View GitHub Profile →
+                </a>
+
+            {% else %}
+
+                <span style="color: #9ca3af;">
+                    GitHub profile not added
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}
