@@ -7,7 +7,11 @@ from app.models.application import JobApplication
 from app.models.goal import Goal
 from app.models.learning import Learning
 
-from app.services.career_intelligence import generate_career_insights
+from app.services.career_intelligence import (
+    generate_career_insights,
+    generate_career_action
+)
+
 from app.services.github_service import GitHubService
 
 
@@ -289,6 +293,10 @@ def home():
         current_user.id
     )
 
+    career_action = generate_career_action(
+        current_user.id
+    )
+
 
     # ============================================================
     # GITHUB DATA
@@ -392,6 +400,7 @@ def home():
 
         # Intelligence
         career_insights=career_insights,
+        career_action=career_action,
 
         # GitHub
         github_connected=github_connected,
@@ -399,3 +408,4 @@ def home():
         github_repositories=github_repositories,
         github_languages=github_languages
     )
+
