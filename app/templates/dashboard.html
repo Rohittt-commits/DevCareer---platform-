@@ -5,97 +5,141 @@
 {% block content %}
 
 <style>
-    .dashboard-container {
-        width: 92%;
-        max-width: 1200px;
+
+    .dashboard {
+        width: min(1200px, 92%);
         margin: 35px auto;
     }
 
-    .dashboard-header,
-    .section,
-    .stat-card {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    .hero {
+        background:
+            linear-gradient(
+                135deg,
+                #111827,
+                #1e3a8a
+            );
+
+        color: white;
+
+        border-radius: 22px;
+
+        padding: 34px;
+
+        margin-bottom: 22px;
+
+        box-shadow:
+            0 18px 45px rgba(15, 23, 42, 0.15);
     }
 
-    .dashboard-header {
-        padding: 28px;
+    .hero h1 {
+        font-size: 34px;
+        margin-bottom: 7px;
+        letter-spacing: -1px;
+    }
+
+    .hero p {
+        color: #dbeafe;
+        max-width: 700px;
+    }
+
+    .stats {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(170px, 1fr)
+            );
+
+        gap: 15px;
+
         margin-bottom: 22px;
     }
 
-    .dashboard-header h1 {
-        font-size: 32px;
+    .stat {
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 16px;
+
+        padding: 21px;
+
+        box-shadow:
+            0 7px 22px rgba(15, 23, 42, 0.05);
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        font-size: 29px;
+        font-weight: 850;
+    }
+
+    .dashboard-section {
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 17px;
+
+        padding: 25px;
+
+        margin-bottom: 22px;
+
+        box-shadow:
+            0 7px 22px rgba(15, 23, 42, 0.05);
+    }
+
+    .dashboard-section h2 {
+        font-size: 21px;
         margin-bottom: 6px;
     }
 
-    .dashboard-header p,
-    .section-description {
+    .section-subtitle {
         color: #6b7280;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-        gap: 15px;
-        margin-bottom: 22px;
-    }
-
-    .stat-card {
-        padding: 21px;
-    }
-
-    .stat-card h3 {
-        color: #6b7280;
-        font-size: 14px;
-        margin-bottom: 7px;
-    }
-
-    .stat-number {
-        font-size: 28px;
-        font-weight: 800;
-    }
-
-    .section {
-        padding: 24px;
-        margin-bottom: 22px;
-    }
-
-    .section h2 {
-        margin-bottom: 8px;
-        font-size: 22px;
-    }
-
-    .intelligence {
-        border-left: 5px solid #2563eb;
+        margin-bottom: 18px;
     }
 
     .insight {
+        background: #f8fafc;
+
         border: 1px solid #e5e7eb;
-        background: #f9fafb;
-        padding: 17px;
-        border-radius: 10px;
+
+        border-radius: 12px;
+
+        padding: 16px;
+
         margin-top: 12px;
     }
 
     .insight-header {
         display: flex;
+
         justify-content: space-between;
+
         align-items: center;
+
         gap: 10px;
     }
 
-    .insight h3 {
-        font-size: 16px;
-    }
-
     .priority {
-        font-size: 11px;
-        font-weight: 800;
+        background: #eff6ff;
+
+        color: #1d4ed8;
+
         padding: 5px 9px;
-        border-radius: 20px;
-        background: #e5e7eb;
+
+        border-radius: 999px;
+
+        font-size: 10px;
+
+        font-weight: 800;
     }
 
     .insight p {
@@ -103,15 +147,25 @@
         margin-top: 8px;
     }
 
-    .overview-grid {
+    .overview {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(240px, 1fr)
+            );
+
         gap: 15px;
     }
 
     .overview-card {
+        background: #f8fafc;
+
         border: 1px solid #e5e7eb;
-        border-radius: 11px;
+
+        border-radius: 13px;
+
         padding: 19px;
     }
 
@@ -121,576 +175,652 @@
     }
 
     .overview-card p {
-        margin: 7px 0;
         color: #4b5563;
+        margin: 7px 0;
     }
 
     .overview-card strong {
         color: #111827;
     }
 
-    .progress-container {
-        background: #e5e7eb;
-        height: 9px;
-        border-radius: 20px;
-        overflow: hidden;
-        margin-top: 12px;
-    }
-
-    .progress-bar {
-        height: 100%;
-        background: #2563eb;
-        border-radius: 20px;
-    }
-
-    .item {
+    .recent-item {
         padding: 14px 0;
+
         border-bottom: 1px solid #f0f0f0;
     }
 
-    .item:last-child {
+    .recent-item:last-child {
         border-bottom: none;
     }
 
-    .item small {
+    .recent-item small {
         color: #6b7280;
     }
 
-    .empty {
-        color: #9ca3af;
-        padding: 10px 0;
-    }
-
-    .profile-grid {
+    .profile {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 10px;
-        margin-top: 15px;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+
+        gap: 13px;
     }
 
-    .profile-item {
-        background: #f9fafb;
+    .profile-card {
+        background: #f8fafc;
+
         border: 1px solid #e5e7eb;
-        border-radius: 9px;
-        padding: 15px;
+
+        border-radius: 12px;
+
+        padding: 17px;
     }
 
-    .profile-item a {
-        color: #2563eb;
+    .profile-label {
+        color: #6b7280;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+
+        margin-bottom: 4px;
+    }
+
+    .github-card {
+        background:
+            linear-gradient(
+                135deg,
+                #111827,
+                #374151
+            );
+
+        color: white;
+    }
+
+    .github-card .profile-label {
+        color: #cbd5e1;
+    }
+
+    .github-card a {
+        display: inline-block;
+
+        margin-top: 9px;
+
+        color: white;
+
         text-decoration: none;
-        font-weight: 600;
+
+        font-weight: 700;
+
+        padding: 8px 12px;
+
+        background: rgba(255,255,255,0.1);
+
+        border-radius: 8px;
     }
 
-    .profile-item a:hover {
-        text-decoration: underline;
+    .github-card a:hover {
+        background: rgba(255,255,255,0.18);
     }
 
-    @media (max-width: 700px) {
-        .dashboard-container {
-            width: 94%;
-            margin-top: 25px;
-        }
-
-        .dashboard-header {
-            padding: 21px;
-        }
-
-        .dashboard-header h1 {
-            font-size: 26px;
-        }
-
-        .section {
-            padding: 20px;
-        }
-
-        .insight-header {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-    }
 </style>
 
-<div class="dashboard-container">
 
-<!-- HEADER -->
-
-<div class="dashboard-header">
-
-    <h1>
-        Welcome back, {{ current_user.username }}!
-    </h1>
-
-    <p>
-        Your developer career command center.
-        Track your progress, applications, skills,
-        goals and learning in one place.
-    </p>
-
-</div>
+<div class="dashboard">
 
 
-<!-- CAREER STATS -->
+    <!-- HERO -->
 
-<div class="stats-grid">
+    <div class="hero">
 
-    <div class="stat-card">
-        <h3>Career Score</h3>
-        <div class="stat-number">
-            {{ career_score }}/100
-        </div>
+        <h1>
+            Welcome back, {{ current_user.username }}! 🚀
+        </h1>
+
+        <p>
+            Your developer career command center.
+            Track projects, skills, applications,
+            goals and learning from one place.
+        </p>
+
     </div>
 
-    <div class="stat-card">
-        <h3>Projects</h3>
-        <div class="stat-number">
-            {{ project_count }}
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                Career Score
+            </div>
+
+            <div class="stat-value">
+                {{ career_score }}/100
+            </div>
         </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Projects
+            </div>
+
+            <div class="stat-value">
+                {{ project_count }}
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Skills
+            </div>
+
+            <div class="stat-value">
+                {{ skill_count }}
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Applications
+            </div>
+
+            <div class="stat-value">
+                {{ application_count }}
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Goals
+            </div>
+
+            <div class="stat-value">
+                {{ goal_count }}
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">
+                Learning
+            </div>
+
+            <div class="stat-value">
+                {{ learning_count }}
+            </div>
+        </div>
+
     </div>
 
-    <div class="stat-card">
-        <h3>Skills</h3>
-        <div class="stat-number">
-            {{ skill_count }}
-        </div>
+
+    <!-- CAREER INTELLIGENCE -->
+
+    <div class="dashboard-section">
+
+        <h2>🧠 Career Intelligence</h2>
+
+        <p class="section-subtitle">
+            Personalized recommendations based on your career data.
+        </p>
+
+        {% if career_insights %}
+
+            {% for insight in career_insights %}
+
+                <div class="insight">
+
+                    <div class="insight-header">
+
+                        <strong>
+                            {{ insight.title }}
+                        </strong>
+
+                        <span class="priority">
+                            {{ insight.priority|upper }}
+                        </span>
+
+                    </div>
+
+                    <p>
+                        {{ insight.message }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                Add career data to generate personalized insights.
+            </p>
+
+        {% endif %}
+
     </div>
 
-    <div class="stat-card">
-        <h3>Applications</h3>
-        <div class="stat-number">
-            {{ application_count }}
+
+    <!-- OVERVIEW -->
+
+    <div class="dashboard-section">
+
+        <h2>📊 Career Overview</h2>
+
+        <p class="section-subtitle">
+            A quick snapshot of your current progress.
+        </p>
+
+        <div class="overview">
+
+
+            <div class="overview-card">
+
+                <h3>🚀 Projects</h3>
+
+                <p>
+                    Completed:
+                    <strong>{{ completed_projects }}</strong>
+                </p>
+
+                <p>
+                    In Progress:
+                    <strong>{{ in_progress_projects }}</strong>
+                </p>
+
+                <p>
+                    Planned:
+                    <strong>{{ planned_projects }}</strong>
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>🛠️ Skills</h3>
+
+                <p>
+                    Average Proficiency:
+                    <strong>
+                        {{ average_proficiency }}/5
+                    </strong>
+                </p>
+
+                {% if strongest_skill %}
+
+                    <p>
+                        Strongest Skill:
+                        <strong>
+                            {{ strongest_skill }}
+                        </strong>
+                    </p>
+
+                {% endif %}
+
+                <p>
+                    Needs Improvement:
+                    <strong>
+                        {{ skills_needing_improvement|length }}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>💼 Applications</h3>
+
+                <p>
+                    Interview Rate:
+                    <strong>
+                        {{ interview_rate }}%
+                    </strong>
+                </p>
+
+                <p>
+                    Offer Rate:
+                    <strong>
+                        {{ offer_rate }}%
+                    </strong>
+                </p>
+
+                <p>
+                    Interviews:
+                    <strong>
+                        {{ interview_count }}
+                    </strong>
+                </p>
+
+                <p>
+                    Offers:
+                    <strong>
+                        {{ offer_count }}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>🎯 Goals</h3>
+
+                <p>
+                    Active:
+                    <strong>
+                        {{ active_goals|length }}
+                    </strong>
+                </p>
+
+                <p>
+                    Completed:
+                    <strong>
+                        {{ completed_goals|length }}
+                    </strong>
+                </p>
+
+                <p>
+                    Progress:
+                    <strong>
+                        {{ average_goal_progress }}%
+                    </strong>
+                </p>
+
+                <div class="progress-container">
+
+                    <div
+                        class="progress-bar"
+                        style="width: {{ average_goal_progress }}%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <h3>📚 Learning</h3>
+
+                <p>
+                    Active:
+                    <strong>
+                        {{ active_learning|length }}
+                    </strong>
+                </p>
+
+                <p>
+                    Completed:
+                    <strong>
+                        {{ completed_learning|length }}
+                    </strong>
+                </p>
+
+                <p>
+                    Progress:
+                    <strong>
+                        {{ average_learning_progress }}%
+                    </strong>
+                </p>
+
+                <div class="progress-container">
+
+                    <div
+                        class="progress-bar"
+                        style="width: {{ average_learning_progress }}%;">
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 
-    <div class="stat-card">
-        <h3>Goals</h3>
-        <div class="stat-number">
-            {{ goal_count }}
-        </div>
+
+    <!-- RECENT PROJECTS -->
+
+    <div class="dashboard-section">
+
+        <h2>🚀 Recent Projects</h2>
+
+        {% if recent_projects %}
+
+            {% for project in recent_projects %}
+
+                <div class="recent-item">
+
+                    <strong>
+                        {{ project.title }}
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        Status: {{ project.status }}
+                    </small>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                No projects added yet.
+            </p>
+
+        {% endif %}
+
     </div>
 
-    <div class="stat-card">
-        <h3>Learning</h3>
-        <div class="stat-number">
-            {{ learning_count }}
-        </div>
+
+    <!-- RECENT APPLICATIONS -->
+
+    <div class="dashboard-section">
+
+        <h2>💼 Recent Applications</h2>
+
+        {% if recent_applications %}
+
+            {% for application in recent_applications %}
+
+                <div class="recent-item">
+
+                    <strong>
+                        {{ application.company }}
+                    </strong>
+
+                    — {{ application.position }}
+
+                    <br>
+
+                    <small>
+                        Status: {{ application.status }}
+                    </small>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                No applications added yet.
+            </p>
+
+        {% endif %}
+
     </div>
 
-</div>
+
+    <!-- RECENT GOALS -->
+
+    <div class="dashboard-section">
+
+        <h2>🎯 Recent Goals</h2>
+
+        {% if recent_goals %}
+
+            {% for goal in recent_goals %}
+
+                <div class="recent-item">
+
+                    <strong>
+                        {{ goal.title }}
+                    </strong>
+
+                    — {{ goal.progress }}%
+
+                    <br>
+
+                    <small>
+                        Status: {{ goal.status }}
+                    </small>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                No goals added yet.
+            </p>
+
+        {% endif %}
+
+    </div>
 
 
-<!-- CAREER INTELLIGENCE -->
+    <!-- RECENT LEARNING -->
 
-<div class="section intelligence">
+    <div class="dashboard-section">
 
-    <h2>Career Intelligence</h2>
+        <h2>📚 Recent Learning</h2>
 
-    <p class="section-description">
-        DevCareer analyzes your career data and gives you
-        actionable recommendations.
-    </p>
+        {% if recent_learning %}
 
-    {% if career_insights %}
+            {% for item in recent_learning %}
 
-        {% for insight in career_insights %}
+                <div class="recent-item">
 
-            <div class="insight">
+                    <strong>
+                        {{ item.title }}
+                    </strong>
 
-                <div class="insight-header">
+                    — {{ item.progress }}%
 
-                    <h3>
-                        {{ insight.title }}
-                    </h3>
+                    <br>
 
-                    <span class="priority">
-                        {{ insight.priority|upper }}
+                    <small>
+                        Status: {{ item.status }}
+                    </small>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty">
+                No learning items added yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <div class="dashboard-section">
+
+        <h2>👤 Developer Profile</h2>
+
+        <p class="section-subtitle">
+            Your account and developer identity.
+        </p>
+
+        <div class="profile">
+
+            <div class="profile-card">
+
+                <div class="profile-label">
+                    Username
+                </div>
+
+                <strong>
+                    {{ current_user.username }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <div class="profile-label">
+                    Email
+                </div>
+
+                <strong>
+                    {{ current_user.email }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-card github-card">
+
+                <div class="profile-label">
+                    GitHub Profile
+                </div>
+
+                {% if current_user.github_url %}
+
+                    <strong>
+                        GitHub connected
+                    </strong>
+
+                    <br>
+
+                    <a
+                        href="{{ current_user.github_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View GitHub Profile →
+                    </a>
+
+                {% else %}
+
+                    <strong>
+                        Git profile not added
+                    </strong>
+
+                    <br>
+
+                    <span style="color:#cbd5e1;font-size:13px;">
+                        Add your GitHub profile to showcase your work.
                     </span>
 
-                </div>
+                {% endif %}
 
-                <p>
-                    {{ insight.message }}
-                </p>
-
-            </div>
-
-        {% endfor %}
-
-    {% else %}
-
-        <p class="empty">
-            Add projects, skills, applications, goals or
-            learning activities to generate career insights.
-        </p>
-
-    {% endif %}
-
-</div>
-
-
-<!-- CAREER OVERVIEW -->
-
-<div class="section">
-
-    <h2>Career Overview</h2>
-
-    <p class="section-description">
-        A quick overview of your current career progress.
-    </p>
-
-    <div class="overview-grid">
-
-        <div class="overview-card">
-
-            <h3>Projects</h3>
-
-            <p>
-                Completed:
-                <strong>{{ completed_projects }}</strong>
-            </p>
-
-            <p>
-                In Progress:
-                <strong>{{ in_progress_projects }}</strong>
-            </p>
-
-            <p>
-                Planned:
-                <strong>{{ planned_projects }}</strong>
-            </p>
-
-        </div>
-
-
-        <div class="overview-card">
-
-            <h3>Skills</h3>
-
-            <p>
-                Average Proficiency:
-                <strong>{{ average_proficiency }}/5</strong>
-            </p>
-
-            {% if strongest_skill %}
-
-                <p>
-                    Strongest Skill:
-                    <strong>{{ strongest_skill }}</strong>
-                </p>
-
-            {% endif %}
-
-            <p>
-                Needs Improvement:
-                <strong>
-                    {{ skills_needing_improvement|length }}
-                </strong>
-            </p>
-
-        </div>
-
-
-        <div class="overview-card">
-
-            <h3>Applications</h3>
-
-            <p>
-                Interview Rate:
-                <strong>{{ interview_rate }}%</strong>
-            </p>
-
-            <p>
-                Offer Rate:
-                <strong>{{ offer_rate }}%</strong>
-            </p>
-
-            <p>
-                Interviews:
-                <strong>{{ interview_count }}</strong>
-            </p>
-
-            <p>
-                Offers:
-                <strong>{{ offer_count }}</strong>
-            </p>
-
-        </div>
-
-
-        <div class="overview-card">
-
-            <h3>Goals</h3>
-
-            <p>
-                Active:
-                <strong>{{ active_goals|length }}</strong>
-            </p>
-
-            <p>
-                Completed:
-                <strong>{{ completed_goals|length }}</strong>
-            </p>
-
-            <p>
-                Average Progress:
-                <strong>{{ average_goal_progress }}%</strong>
-            </p>
-
-            <div class="progress-container">
-                <div
-                    class="progress-bar"
-                    style="width: {{ average_goal_progress }}%;">
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="overview-card">
-
-            <h3>Learning</h3>
-
-            <p>
-                Active:
-                <strong>{{ active_learning|length }}</strong>
-            </p>
-
-            <p>
-                Completed:
-                <strong>{{ completed_learning|length }}</strong>
-            </p>
-
-            <p>
-                Average Progress:
-                <strong>{{ average_learning_progress }}%</strong>
-            </p>
-
-            <div class="progress-container">
-                <div
-                    class="progress-bar"
-                    style="width: {{ average_learning_progress }}%;">
-                </div>
             </div>
 
         </div>
 
     </div>
 
-</div>
-
-
-<!-- RECENT PROJECTS -->
-
-<div class="section">
-
-    <h2>Recent Projects</h2>
-
-    {% if recent_projects %}
-
-        {% for project in recent_projects %}
-
-            <div class="item">
-
-                <strong>
-                    {{ project.title }}
-                </strong>
-
-                <br>
-
-                <small>
-                    Status: {{ project.status }}
-                </small>
-
-            </div>
-
-        {% endfor %}
-
-    {% else %}
-
-        <p class="empty">
-            No projects added yet.
-        </p>
-
-    {% endif %}
-
-</div>
-
-
-<!-- RECENT APPLICATIONS -->
-
-<div class="section">
-
-    <h2>Recent Applications</h2>
-
-    {% if recent_applications %}
-
-        {% for application in recent_applications %}
-
-            <div class="item">
-
-                <strong>
-                    {{ application.company }}
-                </strong>
-
-                — {{ application.position }}
-
-                <br>
-
-                <small>
-                    Status: {{ application.status }}
-                </small>
-
-            </div>
-
-        {% endfor %}
-
-    {% else %}
-
-        <p class="empty">
-            No applications added yet.
-        </p>
-
-    {% endif %}
-
-</div>
-
-
-<!-- RECENT GOALS -->
-
-<div class="section">
-
-    <h2>Recent Goals</h2>
-
-    {% if recent_goals %}
-
-        {% for goal in recent_goals %}
-
-            <div class="item">
-
-                <strong>
-                    {{ goal.title }}
-                </strong>
-
-                — {{ goal.progress }}%
-
-                <br>
-
-                <small>
-                    Status: {{ goal.status }}
-                </small>
-
-            </div>
-
-        {% endfor %}
-
-    {% else %}
-
-        <p class="empty">
-            No goals added yet.
-        </p>
-
-    {% endif %}
-
-</div>
-
-
-<!-- RECENT LEARNING -->
-
-<div class="section">
-
-    <h2>Recent Learning</h2>
-
-    {% if recent_learning %}
-
-        {% for item in recent_learning %}
-
-            <div class="item">
-
-                <strong>
-                    {{ item.title }}
-                </strong>
-
-                — {{ item.progress }}%
-
-                <br>
-
-                <small>
-                    Status: {{ item.status }}
-                </small>
-
-            </div>
-
-        {% endfor %}
-
-    {% else %}
-
-        <p class="empty">
-            No learning items added yet.
-        </p>
-
-    {% endif %}
-
-</div>
-
-
-<!-- PROFILE -->
-
-<div class="section">
-
-    <h2>Your Profile</h2>
-
-    <div class="profile-grid">
-
-        <div class="profile-item">
-
-            <strong>Username</strong>
-
-            <br>
-
-            {{ current_user.username }}
-
-        </div>
-
-
-        <div class="profile-item">
-
-            <strong>Email</strong>
-
-            <br>
-
-            {{ current_user.email }}
-
-        </div>
-
-
-        <div class="profile-item">
-
-            <strong>GitHub</strong>
-
-            <br>
-
-            {% if current_user.github_url %}
-
-                <a
-                    href="{{ current_user.github_url }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    View GitHub Profile →
-                </a>
-
-            {% else %}
-
-                <span style="color: #9ca3af;">
-                    GitHub profile not added
-                </span>
-
-            {% endif %}
-
-        </div>
-
-    </div>
-
-</div>
 
 </div>
 
