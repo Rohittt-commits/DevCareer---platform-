@@ -406,6 +406,302 @@
 
     </div>
 
+    <!-- CAREER HEALTH -->
+
+<div class="dashboard-section">
+
+    <h2>Career Health</h2>
+
+    <p class="section-subtitle">
+        A data-driven view of your overall career readiness.
+    </p>
+
+    <div class="overview">
+
+        <div class="overview-card">
+
+            <h3>Overall Readiness</h3>
+
+            <p>
+                <strong style="font-size:32px;">
+                    {{ career_health.overall }}/100
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.overall }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Portfolio</h3>
+
+            <p>
+                Project Health:
+                <strong>
+                    {{ career_health.portfolio }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.portfolio }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Skills</h3>
+
+            <p>
+                Skill Health:
+                <strong>
+                    {{ career_health.skills }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.skills }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Applications</h3>
+
+            <p>
+                Application Health:
+                <strong>
+                    {{ career_health.applications }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.applications }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Learning</h3>
+
+            <p>
+                Learning Health:
+                <strong>
+                    {{ career_health.learning }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.learning }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Goals</h3>
+
+            <p>
+                Goal Health:
+                <strong>
+                    {{ career_health.goals }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.goals }}%;">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CAREER PROGRESS -->
+
+<div class="dashboard-section">
+
+    <h2>Career Progress</h2>
+
+    <p class="section-subtitle">
+        A complete view of how your career development is progressing.
+    </p>
+
+    <div class="overview">
+
+        <div class="overview-card">
+
+            <h3>Overall Career Health</h3>
+
+            <p>
+                <strong style="font-size:32px;">
+                    {{ career_health.overall }}/100
+                </strong>
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.overall }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Portfolio</h3>
+
+            <p>
+                {{ career_health.portfolio }}%
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.portfolio }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Skills</h3>
+
+            <p>
+                {{ career_health.skills }}%
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.skills }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Learning</h3>
+
+            <p>
+                {{ career_health.learning }}%
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.learning }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Goals</h3>
+
+            <p>
+                {{ career_health.goals }}%
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.goals }}%;">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="overview-card">
+
+            <h3>Applications</h3>
+
+            <p>
+                {{ career_health.applications }}%
+            </p>
+
+            <div class="progress-container">
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_health.applications }}%;">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- NEXT BEST ACTION -->
+
+<div class="dashboard-section">
+
+    <h2>Next Best Action</h2>
+
+    <p class="section-subtitle">
+        DevCareer identifies the highest-priority action based on your data.
+    </p>
+
+    {% if career_action %}
+
+        <div class="insight">
+
+            <div class="insight-header">
+
+                <strong>
+                    {{ career_action.title }}
+                </strong>
+
+                <span class="priority">
+                    {{ career_action.priority|upper }}
+                </span>
+
+            </div>
+
+            <p>
+                {{ career_action.action }}
+            </p>
+
+        </div>
+
+    {% else %}
+
+        <p class="empty">
+            Add more career data to generate your next best action.
+        </p>
+
+    {% endif %}
+
+    </div>
 
     <!-- OVERVIEW -->
 
@@ -586,6 +882,263 @@
 
     </div>
 
+    <!-- CAREER PROGRESS -->
+
+<div class="dashboard-section">
+
+    <h2>📈 Career Progress</h2>
+
+    <p class="section-subtitle">
+        A unified view of your current career development.
+    </p>
+
+    <div class="overview">
+
+        <!-- Overall -->
+
+        <div class="overview-card">
+
+            <h3>Overall Career Score</h3>
+
+            <p>
+                <strong style="font-size:32px;">
+                    {{ career_score }}/100
+                </strong>
+            </p>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ career_score }}%;">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Portfolio -->
+
+        <div class="overview-card">
+
+            <h3>Portfolio</h3>
+
+            {% set portfolio_progress = [project_count * 50, 100]|min %}
+
+            <p>
+                <strong>
+                    {{ portfolio_progress }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ portfolio_progress }}%;">
+                </div>
+
+            </div>
+
+            <p>
+                {{ project_count }} project(s) tracked
+            </p>
+
+        </div>
+
+
+        <!-- Skills -->
+
+        <div class="overview-card">
+
+            <h3>Skills</h3>
+
+            {% set skill_progress = [(average_proficiency / 5 * 100), 100]|min|round|int %}
+
+            <p>
+                <strong>
+                    {{ skill_progress }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ skill_progress }}%;">
+                </div>
+
+            </div>
+
+            <p>
+                {{ skill_count }} skill(s) tracked
+            </p>
+
+        </div>
+
+
+        <!-- Learning -->
+
+        <div class="overview-card">
+
+            <h3>Learning</h3>
+
+            <p>
+                <strong>
+                    {{ average_learning_progress }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ average_learning_progress }}%;">
+                </div>
+
+            </div>
+
+            <p>
+                {{ completed_learning|length }}
+                completed learning item(s)
+            </p>
+
+        </div>
+
+
+        <!-- Goals -->
+
+        <div class="overview-card">
+
+            <h3>Goals</h3>
+
+            <p>
+                <strong>
+                    {{ average_goal_progress }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ average_goal_progress }}%;">
+                </div>
+
+            </div>
+
+            <p>
+                {{ completed_goals|length }}
+                completed goal(s)
+            </p>
+
+        </div>
+
+
+        <!-- Applications -->
+
+        <div class="overview-card">
+
+            <h3>Job Search</h3>
+
+            {% set application_progress = [application_count * 20, 100]|min %}
+
+            <p>
+                <strong>
+                    {{ application_progress }}%
+                </strong>
+            </p>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width: {{ application_progress }}%;">
+                </div>
+
+            </div>
+
+            <p>
+                {{ application_count }}
+                application(s) tracked
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- CAREER STATUS -->
+
+    <div class="insight">
+
+        <div class="insight-header">
+
+            <strong>Career Status</strong>
+
+            {% if career_score >= 80 %}
+
+                <span class="priority">
+                    EXCELLENT
+                </span>
+
+            {% elif career_score >= 60 %}
+
+                <span class="priority">
+                    GOOD
+                </span>
+
+            {% elif career_score >= 40 %}
+
+                <span class="priority">
+                    DEVELOPING
+                </span>
+
+            {% else %}
+
+                <span class="priority">
+                    STARTING
+                </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <p>
+
+            {% if career_score >= 80 %}
+
+                Your career foundation is strong.
+                Keep improving your skills, portfolio and application
+                consistency.
+
+            {% elif career_score >= 60 %}
+
+                You're building a solid career foundation.
+                Continue strengthening your portfolio and increasing
+                relevant application activity.
+
+            {% elif career_score >= 40 %}
+
+                You're making progress, but several areas still need
+                attention. Focus on projects, skills and consistent
+                learning.
+
+            {% else %}
+
+                You're at the beginning of your career-building journey.
+                Start by adding projects, developing skills and tracking
+                your learning progress.
+
+            {% endif %}
+
+        </p>
+
+    </div>
+
+</div>
 
     <!-- RECENT PROJECTS -->
 

@@ -7,8 +7,8 @@ from app.models.learning import Learning
 
 def generate_career_insights(user_id):
     """
-    Generate career insights based on the user's
-    current DevCareer data.
+    Generate personalized career insights based on
+    the user's current DevCareer data.
     """
 
     projects = Project.query.filter_by(user_id=user_id).all()
@@ -16,6 +16,12 @@ def generate_career_insights(user_id):
     applications = JobApplication.query.filter_by(user_id=user_id).all()
     goals = Goal.query.filter_by(user_id=user_id).all()
     learning_items = Learning.query.filter_by(user_id=user_id).all()
+
+    insights = []
+
+    # ============================================================
+    # PROJECT INSIGHT
+    # ============================================================
 
     completed_projects = [
         project
@@ -25,7 +31,7 @@ def generate_career_insights(user_id):
     ]
 
     if len(completed_projects) == 0:
-        project_insight = {
+        insights.append({
             "type": "portfolio",
             "title": "Build Your First Strong Project",
             "message": (
@@ -34,31 +40,35 @@ def generate_career_insights(user_id):
                 "demonstrates your development skills."
             ),
             "priority": "high"
-        }
+        })
 
     elif len(completed_projects) < 2:
-        project_insight = {
+        insights.append({
             "type": "portfolio",
             "title": "Strengthen Your Portfolio",
             "message": (
                 "You have started building your portfolio. "
-                "Try to complete at least one more strong project "
-                "with clear documentation and real-world functionality."
+                "Complete another strong project and document "
+                "the technologies and results."
             ),
             "priority": "medium"
-        }
+        })
 
     else:
-        project_insight = {
+        insights.append({
             "type": "portfolio",
             "title": "Portfolio Is Building Well",
             "message": (
                 f"You currently have {len(completed_projects)} "
                 "completed projects. Keep improving them and "
-                "highlight measurable results in your portfolio."
+                "highlight measurable results."
             ),
             "priority": "low"
-        }
+        })
+
+    # ============================================================
+    # SKILL INSIGHT
+    # ============================================================
 
     weak_skills = [
         skill
@@ -73,39 +83,43 @@ def generate_career_insights(user_id):
             key=lambda skill: skill.proficiency
         )
 
-        skill_insight = {
+        insights.append({
             "type": "skill",
             "title": "Skill Needs Improvement",
             "message": (
                 f"{weakest_skill.name} is currently one of your "
-                "weakest skills. Practice it through projects, "
-                "exercises and practical development."
+                "weakest skills. Practice it through projects "
+                "and practical development."
             ),
             "priority": "high"
-        }
+        })
 
     elif not skills:
-        skill_insight = {
+        insights.append({
             "type": "skill",
             "title": "Start Tracking Your Skills",
             "message": (
                 "Add the technical skills you are currently learning "
-                "or using so DevCareer can provide better career insights."
+                "or using so DevCareer can provide better insights."
             ),
             "priority": "medium"
-        }
+        })
 
     else:
-        skill_insight = {
+        insights.append({
             "type": "skill",
             "title": "Keep Improving Your Skills",
             "message": (
-                "Your current skills are being tracked. Continue "
-                "improving proficiency and apply your skills in "
-                "real projects."
+                "Your technical skills are being tracked. Continue "
+                "improving proficiency and applying those skills "
+                "in real projects."
             ),
             "priority": "low"
-        }
+        })
+
+    # ============================================================
+    # APPLICATION INSIGHT
+    # ============================================================
 
     applied_statuses = {
         "Applied",
@@ -134,64 +148,65 @@ def generate_career_insights(user_id):
     ]
 
     if len(applied_applications) == 0:
-        application_insight = {
+        insights.append({
             "type": "applications",
             "title": "Start Applying Consistently",
             "message": (
-                "You have not tracked any active job applications yet. "
-                "Start applying to relevant internships or jobs and "
-                "track them inside DevCareer."
+                "You have not tracked any active applications yet. "
+                "Start applying to relevant internships or jobs "
+                "and track them inside DevCareer."
             ),
             "priority": "high"
-        }
+        })
 
     elif len(applied_applications) < 5:
-        application_insight = {
+        insights.append({
             "type": "applications",
             "title": "Increase Application Activity",
             "message": (
                 f"You have tracked {len(applied_applications)} "
-                "applications. Increase your application activity "
-                "while focusing on opportunities that match your skills."
+                "applications. Increase your activity while "
+                "focusing on relevant opportunities."
             ),
             "priority": "medium"
-        }
+        })
 
     elif interviews:
-        application_insight = {
+        insights.append({
             "type": "applications",
             "title": "Interview Opportunities Are Growing",
             "message": (
                 f"You currently have {len(interviews)} application(s) "
-                "at the interview stage. Focus on interview preparation "
-                "and researching each company."
+                "at the interview stage. Focus on interview preparation."
             ),
             "priority": "medium"
-        }
+        })
 
     elif offers:
-        application_insight = {
+        insights.append({
             "type": "applications",
             "title": "You Have an Offer",
             "message": (
                 f"You currently have {len(offers)} offer(s) tracked. "
-                "Review the opportunities carefully and keep your "
-                "application pipeline updated."
+                "Keep your application pipeline updated."
             ),
             "priority": "low"
-        }
+        })
 
     else:
-        application_insight = {
+        insights.append({
             "type": "applications",
             "title": "Keep Applying",
             "message": (
                 f"You have tracked {len(applied_applications)} "
-                "applications. Continue applying consistently and "
-                "monitor your application pipeline."
+                "applications. Continue applying consistently."
             ),
             "priority": "low"
-        }
+        })
+
+    # ============================================================
+    # LEARNING INSIGHT
+    # ============================================================
 
     active_learning = [
         item
@@ -208,40 +223,42 @@ def generate_career_insights(user_id):
     ]
 
     if active_learning:
-        learning_insight = {
+        insights.append({
             "type": "learning",
             "title": "Continue Your Learning",
             "message": (
                 f"You currently have {len(active_learning)} "
-                "active learning item(s). Keep making progress "
-                "and convert important learning into practical work."
+                "active learning item(s). Convert important learning "
+                "into practical work."
             ),
             "priority": "medium"
-        }
+        })
 
     elif not learning_items:
-        learning_insight = {
+        insights.append({
             "type": "learning",
             "title": "Track Your Learning",
             "message": (
-                "Add courses, technologies or learning goals to "
-                "your learning tracker so DevCareer can monitor "
-                "your progress."
+                "Add courses, technologies or learning goals so "
+                "DevCareer can monitor your progress."
             ),
             "priority": "medium"
-        }
+        })
 
     else:
-        learning_insight = {
+        insights.append({
             "type": "learning",
             "title": "Learning Progress Is Strong",
             "message": (
                 f"You have completed {len(completed_learning)} "
-                "learning item(s). Keep applying what you learn "
-                "through practical projects."
+                "learning item(s). Keep applying what you learn."
             ),
             "priority": "low"
-        }
+        })
+
+    # ============================================================
+    # GOAL INSIGHT
+    # ============================================================
 
     active_goals = [
         goal
@@ -263,19 +280,19 @@ def generate_career_insights(user_id):
             key=lambda goal: goal.progress or 0
         )
 
-        goal_insight = {
+        insights.append({
             "type": "goals",
             "title": "Focus On Your Lowest Progress Goal",
             "message": (
                 f"Your goal '{lowest_goal.title}' is currently at "
-                f"{lowest_goal.progress or 0}% progress. "
-                "Give it focused attention this week."
+                f"{lowest_goal.progress or 0}% progress. Give it "
+                "focused attention."
             ),
             "priority": "medium"
-        }
+        })
 
     elif not goals:
-        goal_insight = {
+        insights.append({
             "type": "goals",
             "title": "Set Your First Career Goal",
             "message": (
@@ -283,32 +300,25 @@ def generate_career_insights(user_id):
                 "development journey a clear direction."
             ),
             "priority": "medium"
-        }
+        })
 
     else:
-        goal_insight = {
+        insights.append({
             "type": "goals",
             "title": "Goals Completed",
             "message": (
                 f"You have completed {len(completed_goals)} goal(s). "
-                "Set your next career milestone to keep moving forward."
+                "Set your next career milestone."
             ),
             "priority": "low"
-        }
+        })
 
-    return [
-        project_insight,
-        skill_insight,
-        application_insight,
-        learning_insight,
-        goal_insight
-    ]
+    return insights
 
 
 def generate_career_action(user_id):
     """
-    Generate one highest-priority career action
-    based on the user's current DevCareer data.
+    Generate the single highest-priority career action.
     """
 
     projects = Project.query.filter_by(user_id=user_id).all()
@@ -317,6 +327,7 @@ def generate_career_action(user_id):
     goals = Goal.query.filter_by(user_id=user_id).all()
     learning_items = Learning.query.filter_by(user_id=user_id).all()
 
+    # Weak skill
     weak_skills = [
         skill
         for skill in skills
@@ -335,10 +346,11 @@ def generate_career_action(user_id):
             "priority": "high",
             "action": (
                 f"Improve {weakest_skill.name} and use it "
-                f"in a practical project."
+                "in a practical project."
             )
         }
 
+    # Learning without projects
     active_learning = [
         item
         for item in learning_items
@@ -356,6 +368,7 @@ def generate_career_action(user_id):
             )
         }
 
+    # Portfolio
     completed_projects = [
         project
         for project in projects
@@ -373,6 +386,7 @@ def generate_career_action(user_id):
             )
         }
 
+    # Applications
     applied_statuses = {
         "Applied",
         "Assessment",
@@ -397,6 +411,7 @@ def generate_career_action(user_id):
             )
         }
 
+    # Goals
     active_goals = [
         goal
         for goal in goals
@@ -414,9 +429,8 @@ def generate_career_action(user_id):
             "title": "Make Progress On Your Goal",
             "priority": "medium",
             "action": (
-                f"Focus on your goal '{lowest_goal.title}' "
-                f"and move its progress beyond "
-                f"{lowest_goal.progress or 0}%."
+                f"Focus on '{lowest_goal.title}' and move its "
+                f"progress beyond {lowest_goal.progress or 0}%."
             )
         }
 
@@ -424,9 +438,138 @@ def generate_career_action(user_id):
         "title": "Keep Building Momentum",
         "priority": "low",
         "action": (
-            "Keep your projects, skills, learning and "
-            "job applications updated to maintain accurate "
-            "career insights."
+            "Keep your projects, skills, learning and applications "
+            "updated to maintain accurate career insights."
         )
     }
 
+
+def generate_career_health(user_id):
+    """
+    Calculate measurable career-health dimensions.
+    Each category is scored from 0 to 100.
+    """
+
+    projects = Project.query.filter_by(user_id=user_id).all()
+    skills = Skill.query.filter_by(user_id=user_id).all()
+    applications = JobApplication.query.filter_by(user_id=user_id).all()
+    goals = Goal.query.filter_by(user_id=user_id).all()
+    learning_items = Learning.query.filter_by(user_id=user_id).all()
+
+    # ------------------------------------------------------------
+    # PORTFOLIO HEALTH
+    # ------------------------------------------------------------
+
+    completed_projects = [
+        project
+        for project in projects
+        if project.status
+        and project.status.lower() == "completed"
+    ]
+
+    portfolio_score = min(
+        len(completed_projects) * 25,
+        100
+    )
+
+    # ------------------------------------------------------------
+    # SKILL HEALTH
+    # ------------------------------------------------------------
+
+    if skills:
+        valid_proficiencies = [
+            skill.proficiency
+            for skill in skills
+            if skill.proficiency is not None
+        ]
+
+        if valid_proficiencies:
+            average_skill = sum(valid_proficiencies) / len(
+                valid_proficiencies
+            )
+
+            skill_score = round(
+                (average_skill / 5) * 100
+            )
+        else:
+            skill_score = 0
+    else:
+        skill_score = 0
+
+    # ------------------------------------------------------------
+    # APPLICATION HEALTH
+    # ------------------------------------------------------------
+
+    applied_statuses = {
+        "Applied",
+        "Assessment",
+        "Interview",
+        "Offer",
+        "Rejected"
+    }
+
+    applied_count = sum(
+        1
+        for application in applications
+        if application.status in applied_statuses
+    )
+
+    application_score = min(
+        applied_count * 10,
+        100
+    )
+
+    # ------------------------------------------------------------
+    # LEARNING HEALTH
+    # ------------------------------------------------------------
+
+    if learning_items:
+        progress_values = [
+            item.progress or 0
+            for item in learning_items
+        ]
+
+        learning_score = round(
+            sum(progress_values) / len(progress_values)
+        )
+    else:
+        learning_score = 0
+
+    # ------------------------------------------------------------
+    # GOAL HEALTH
+    # ------------------------------------------------------------
+
+    if goals:
+        progress_values = [
+            goal.progress or 0
+            for goal in goals
+        ]
+
+        goal_score = round(
+            sum(progress_values) / len(progress_values)
+        )
+    else:
+        goal_score = 0
+
+    # ------------------------------------------------------------
+    # OVERALL HEALTH
+    # ------------------------------------------------------------
+
+    overall_score = round(
+        (
+            portfolio_score
+            + skill_score
+            + application_score
+            + learning_score
+            + goal_score
+        ) / 5
+    )
+
+    return {
+        "overall": min(overall_score, 100),
+        "portfolio": portfolio_score,
+        "skills": skill_score,
+        "applications": application_score,
+        "learning": learning_score,
+        "goals": goal_score
+    }

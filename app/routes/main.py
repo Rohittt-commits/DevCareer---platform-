@@ -9,7 +9,8 @@ from app.models.learning import Learning
 
 from app.services.career_intelligence import (
     generate_career_insights,
-    generate_career_action
+    generate_career_action,
+    generate_career_health
 )
 
 from app.services.github_service import GitHubService
@@ -57,7 +58,6 @@ def home():
 
     recent_projects = projects[:5]
 
-
     # ============================================================
     # SKILL DATA
     # ============================================================
@@ -96,7 +96,6 @@ def home():
 
     top_skills = skills[:5]
 
-
     # ============================================================
     # APPLICATION DATA
     # ============================================================
@@ -133,15 +132,8 @@ def home():
     )
 
     interview_count = application_pipeline["Interview"]
-
     offer_count = application_pipeline["Offer"]
-
     rejected_count = application_pipeline["Rejected"]
-
-
-    # ============================================================
-    # APPLICATION METRICS
-    # ============================================================
 
     if applied_count > 0:
 
@@ -161,7 +153,6 @@ def home():
         offer_rate = 0
 
     recent_applications = applications[:5]
-
 
     # ============================================================
     # GOAL DATA
@@ -193,7 +184,7 @@ def home():
 
         average_goal_progress = round(
             sum(
-                goal.progress
+                goal.progress or 0
                 for goal in active_goals
             ) / len(active_goals),
             1
@@ -204,7 +195,6 @@ def home():
         average_goal_progress = 0
 
     recent_goals = goals[:5]
-
 
     # ============================================================
     # LEARNING DATA
@@ -236,7 +226,7 @@ def home():
 
         average_learning_progress = round(
             sum(
-                item.progress
+                item.progress or 0
                 for item in active_learning
             ) / len(active_learning),
             1
@@ -247,7 +237,6 @@ def home():
         average_learning_progress = 0
 
     recent_learning = learning_items[:5]
-
 
     # ============================================================
     # CAREER SCORE
@@ -284,7 +273,6 @@ def home():
         100
     )
 
-
     # ============================================================
     # CAREER INTELLIGENCE
     # ============================================================
@@ -297,6 +285,9 @@ def home():
         current_user.id
     )
 
+    career_health = generate_career_health(
+        current_user.id
+    )
 
     # ============================================================
     # GITHUB DATA
@@ -309,40 +300,30 @@ def home():
     github_languages_result = github_service.get_language_summary()
 
     if github_profile_result.get("success"):
-
         github_profile = github_profile_result.get(
             "profile",
             {}
         )
-
     else:
-
         github_profile = None
 
     if github_repositories_result.get("success"):
-
         github_repositories = github_repositories_result.get(
             "repositories",
             []
         )
-
     else:
-
         github_repositories = []
 
     if github_languages_result.get("success"):
-
         github_languages = github_languages_result.get(
             "languages",
             []
         )
-
     else:
-
         github_languages = []
 
     github_connected = bool(github_profile)
-
 
     # ============================================================
     # DASHBOARD
@@ -398,9 +379,10 @@ def home():
         # Career
         career_score=career_score,
 
-        # Intelligence
+        # Career Intelligence
         career_insights=career_insights,
         career_action=career_action,
+        career_health=career_health,
 
         # GitHub
         github_connected=github_connected,
@@ -408,4 +390,3 @@ def home():
         github_repositories=github_repositories,
         github_languages=github_languages
     )
-

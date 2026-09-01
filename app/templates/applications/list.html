@@ -4,11 +4,138 @@
 
 <div class="container">
 
+    <style>
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+        }
+
+        .analytics-label {
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .analytics-value {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .analytics-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+        }
+
+        .analytics-section h2 {
+            margin-bottom: 5px;
+        }
+
+        .analytics-subtitle {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .pipeline-row {
+            display: grid;
+            grid-template-columns: 110px 1fr 45px;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .pipeline-label {
+            font-weight: 600;
+        }
+
+        .pipeline-track {
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .pipeline-bar {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 999px;
+        }
+
+        .pipeline-count {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .signal {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+
+        .signal strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .signal p {
+            color: #4b5563;
+            margin: 0;
+        }
+
+        .recommendation {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .recommendation strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 600px) {
+
+            .pipeline-row {
+                grid-template-columns: 90px 1fr 35px;
+                gap: 8px;
+            }
+
+        }
+
+    </style>
+
+
+    <!-- PAGE HEADER -->
+
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
 
         <div>
+
             <h1>Job Applications</h1>
-            <p>Track your internship and job applications.</p>
+
+            <p>
+                Track your internship and job applications.
+            </p>
+
         </div>
 
         <a
@@ -23,132 +150,622 @@
 
     {% if applications %}
 
+        <!-- ====================================================== -->
+        <!-- APPLICATION ANALYTICS -->
+        <!-- ====================================================== -->
+
+        {% set total = applications|length %}
+
+        {% set namespace = namespace(
+            wishlist=0,
+            applied=0,
+            assessment=0,
+            interview=0,
+            offer=0,
+            rejected=0,
+            withdrawn=0
+        ) %}
+
         {% for application in applications %}
 
-            <div class="card" style="margin-bottom:20px;">
+            {% if application.status == "Wishlist" %}
+                {% set namespace.wishlist = namespace.wishlist + 1 %}
 
-                <div class="card-body">
+            {% elif application.status == "Applied" %}
+                {% set namespace.applied = namespace.applied + 1 %}
 
-                    <div style="display:flex; justify-content:space-between;">
+            {% elif application.status == "Assessment" %}
+                {% set namespace.assessment = namespace.assessment + 1 %}
 
-                        <div>
+            {% elif application.status == "Interview" %}
+                {% set namespace.interview = namespace.interview + 1 %}
 
-                            <h3>
-                                {{ application.position }}
-                            </h3>
+            {% elif application.status == "Offer" %}
+                {% set namespace.offer = namespace.offer + 1 %}
 
-                            <p>
-                                <strong>{{ application.company }}</strong>
+            {% elif application.status == "Rejected" %}
+                {% set namespace.rejected = namespace.rejected + 1 %}
 
-                                {% if application.location %}
-                                    · {{ application.location }}
-                                {% endif %}
-                            </p>
+            {% elif application.status == "Withdrawn" %}
+                {% set namespace.withdrawn = namespace.withdrawn + 1 %}
 
-                        </div>
+            {% endif %}
+
+        {% endfor %}
 
 
-                        <div>
+        {% set applied_count =
+            namespace.applied
+            + namespace.assessment
+            + namespace.interview
+            + namespace.offer
+            + namespace.rejected
+        %}
 
-                            {% if application.status == "Offer" %}
-                                <span class="badge bg-success">
-                                    {{ application.status }}
-                                </span>
 
-                            {% elif application.status == "Rejected" %}
-                                <span class="badge bg-danger">
-                                    {{ application.status }}
-                                </span>
+        {% if applied_count > 0 %}
 
-                            {% elif application.status == "Interview" %}
-                                <span class="badge bg-warning text-dark">
-                                    {{ application.status }}
-                                </span>
+            {% set interview_rate =
+                ((namespace.interview / applied_count) * 100)|round(1)
+            %}
 
-                            {% else %}
-                                <span class="badge bg-secondary">
-                                    {{ application.status }}
-                                </span>
-                            {% endif %}
+            {% set offer_rate =
+                ((namespace.offer / applied_count) * 100)|round(1)
+            %}
 
-                        </div>
+        {% else %}
 
+            {% set interview_rate = 0 %}
+            {% set offer_rate = 0 %}
+
+        {% endif %}
+
+
+        <!-- ANALYTICS CARDS -->
+
+        <div class="analytics-grid">
+
+            <div class="analytics-card">
+
+                <div class="analytics-label">
+                    Total Applications
+                </div>
+
+                <div class="analytics-value">
+                    {{ total }}
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-label">
+                    Active Pipeline
+                </div>
+
+                <div class="analytics-value">
+                    {{ applied_count }}
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-label">
+                    Interviews
+                </div>
+
+                <div class="analytics-value">
+                    {{ namespace.interview }}
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-label">
+                    Offers
+                </div>
+
+                <div class="analytics-value">
+                    {{ namespace.offer }}
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-label">
+                    Interview Rate
+                </div>
+
+                <div class="analytics-value">
+                    {{ interview_rate }}%
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <div class="analytics-label">
+                    Offer Rate
+                </div>
+
+                <div class="analytics-value">
+                    {{ offer_rate }}%
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================== -->
+        <!-- APPLICATION PIPELINE -->
+        <!-- ====================================================== -->
+
+        <div class="analytics-section">
+
+            <h2>Application Pipeline</h2>
+
+            <p class="analytics-subtitle">
+                See how your opportunities are moving through each stage.
+            </p>
+
+
+            {% set max_pipeline = [
+                namespace.wishlist,
+                namespace.applied,
+                namespace.assessment,
+                namespace.interview,
+                namespace.offer,
+                namespace.rejected,
+                namespace.withdrawn
+            ]|max %}
+
+
+            {% if max_pipeline == 0 %}
+                {% set max_pipeline = 1 %}
+            {% endif %}
+
+
+            <div class="pipeline-row">
+
+                <div class="pipeline-label">
+                    Wishlist
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.wishlist / max_pipeline * 100)|round(1) }}%;">
                     </div>
 
+                </div>
 
-                    {% if application.applied_date %}
-                        <p>
-                            Applied:
-                            {{ application.applied_date.strftime("%d %b %Y") }}
-                        </p>
-                    {% endif %}
+                <div class="pipeline-count">
+                    {{ namespace.wishlist }}
+                </div>
 
-
-                    {% if application.notes %}
-                        <p>
-                            {{ application.notes }}
-                        </p>
-                    {% endif %}
+            </div>
 
 
-                    <div style="margin-top:15px;">
+            <div class="pipeline-row">
 
-                        {% if application.job_url %}
-                            <a
-                                href="{{ application.job_url }}"
-                                target="_blank"
-                                class="btn btn-sm btn-outline-primary"
-                            >
-                                Job Posting
-                            </a>
+                <div class="pipeline-label">
+                    Applied
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.applied / max_pipeline * 100)|round(1) }}%;">
+                    </div>
+
+                </div>
+
+                <div class="pipeline-count">
+                    {{ namespace.applied }}
+                </div>
+
+            </div>
+
+
+            <div class="pipeline-row">
+
+                <div class="pipeline-label">
+                    Assessment
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.assessment / max_pipeline * 100)|round(1) }}%;">
+                    </div>
+
+                </div>
+
+                <div class="pipeline-count">
+                    {{ namespace.assessment }}
+                </div>
+
+            </div>
+
+
+            <div class="pipeline-row">
+
+                <div class="pipeline-label">
+                    Interview
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.interview / max_pipeline * 100)|round(1) }}%;">
+                    </div>
+
+                </div>
+
+                <div class="pipeline-count">
+                    {{ namespace.interview }}
+                </div>
+
+            </div>
+
+
+            <div class="pipeline-row">
+
+                <div class="pipeline-label">
+                    Offer
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.offer / max_pipeline * 100)|round(1) }}%;">
+                    </div>
+
+                </div>
+
+                <div class="pipeline-count">
+                    {{ namespace.offer }}
+                </div>
+
+            </div>
+
+
+            <div class="pipeline-row">
+
+                <div class="pipeline-label">
+                    Rejected
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.rejected / max_pipeline * 100)|round(1) }}%;">
+                    </div>
+
+                </div>
+
+                <div class="pipeline-count">
+                    {{ namespace.rejected }}
+                </div>
+
+            </div>
+
+
+            <div class="pipeline-row">
+
+                <div class="pipeline-label">
+                    Withdrawn
+                </div>
+
+                <div class="pipeline-track">
+
+                    <div
+                        class="pipeline-bar"
+                        style="width: {{ (namespace.withdrawn / max_pipeline * 100)|round(1) }}%;">
+                    </div>
+
+                </div>
+
+                <div class="pipeline-count">
+                    {{ namespace.withdrawn }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================== -->
+        <!-- CAREER SIGNAL -->
+        <!-- ====================================================== -->
+
+        <div class="analytics-section">
+
+            <h2>Career Signals</h2>
+
+            <p class="analytics-subtitle">
+                Insights generated from your application activity.
+            </p>
+
+
+            {% if namespace.offer > 0 %}
+
+                <div class="signal">
+
+                    <strong>
+                        🎉 Offer activity detected
+                    </strong>
+
+                    <p>
+                        You currently have {{ namespace.offer }}
+                        offer(s). Keep your application pipeline updated
+                        and evaluate each opportunity carefully.
+                    </p>
+
+                </div>
+
+
+            {% elif namespace.interview > 0 %}
+
+                <div class="signal">
+
+                    <strong>
+                        🎯 Interview opportunities are growing
+                    </strong>
+
+                    <p>
+                        You have {{ namespace.interview }}
+                        application(s) at the interview stage.
+                        Focus on interview preparation and technical
+                        practice.
+                    </p>
+
+                </div>
+
+
+            {% elif applied_count >= 5 %}
+
+                <div class="signal">
+
+                    <strong>
+                        📈 Good application activity
+                    </strong>
+
+                    <p>
+                        You have {{ applied_count }}
+                        tracked applications. Keep applying consistently
+                        and monitor your conversion rates.
+                    </p>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="signal">
+
+                    <strong>
+                        ⚠ Increase application activity
+                    </strong>
+
+                    <p>
+                        Your current application volume is relatively low.
+                        Focus on finding relevant internships and jobs
+                        and track them consistently.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="recommendation">
+
+                <strong>
+                    Next Recommendation
+                </strong>
+
+                {% if namespace.interview > 0 %}
+
+                    Prepare specifically for your upcoming interviews
+                    and review the requirements of each role.
+
+                {% elif applied_count < 5 %}
+
+                    Aim to build a stronger application pipeline by
+                    applying to more relevant opportunities.
+
+                {% else %}
+
+                    Keep your application pipeline active and use your
+                    interview and offer rates to evaluate your progress.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================== -->
+        <!-- APPLICATION LIST -->
+        <!-- ====================================================== -->
+
+        <div class="analytics-section">
+
+            <h2>Your Applications</h2>
+
+            <p class="analytics-subtitle">
+                Manage and update your tracked opportunities.
+            </p>
+
+
+            {% for application in applications %}
+
+                <div class="card" style="margin-bottom:20px;">
+
+                    <div class="card-body">
+
+                        <div style="display:flex; justify-content:space-between;">
+
+                            <div>
+
+                                <h3>
+                                    {{ application.position }}
+                                </h3>
+
+                                <p>
+
+                                    <strong>
+                                        {{ application.company }}
+                                    </strong>
+
+                                    {% if application.location %}
+                                        · {{ application.location }}
+                                    {% endif %}
+
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                {% if application.status == "Offer" %}
+
+                                    <span class="badge bg-success">
+                                        {{ application.status }}
+                                    </span>
+
+                                {% elif application.status == "Rejected" %}
+
+                                    <span class="badge bg-danger">
+                                        {{ application.status }}
+                                    </span>
+
+                                {% elif application.status == "Interview" %}
+
+                                    <span class="badge bg-warning text-dark">
+                                        {{ application.status }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        {{ application.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        {% if application.applied_date %}
+
+                            <p>
+                                Applied:
+                                {{ application.applied_date.strftime("%d %b %Y") }}
+                            </p>
+
                         {% endif %}
 
-                        <a
-                            href="{{ url_for(
-                                'applications.edit_application',
-                                application_id=application.id
-                            ) }}"
-                            class="btn btn-sm btn-outline-secondary"
-                        >
-                            Edit
-                        </a>
+
+                        {% if application.notes %}
+
+                            <p>
+                                {{ application.notes }}
+                            </p>
+
+                        {% endif %}
 
 
-                        <form
-                            method="POST"
-                            action="{{ url_for(
-                                'applications.delete_application',
-                                application_id=application.id
-                            ) }}"
-                            style="display:inline;"
-                        >
+                        <div style="margin-top:15px;">
 
-                            <button
-                                type="submit"
-                                class="btn btn-sm btn-outline-danger"
-                                onclick="return confirm('Delete this application?');"
+                            {% if application.job_url %}
+
+                                <a
+                                    href="{{ application.job_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn btn-sm btn-outline-primary"
+                                >
+                                    Job Posting
+                                </a>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{{ url_for(
+                                    'applications.edit_application',
+                                    application_id=application.id
+                                ) }}"
+                                class="btn btn-sm btn-outline-secondary"
                             >
-                                Delete
-                            </button>
+                                Edit
+                            </a>
 
-                        </form>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'applications.delete_application',
+                                    application_id=application.id
+                                ) }}"
+                                style="display:inline;"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Delete this application?');"
+                                >
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+            {% endfor %}
 
-        {% endfor %}
+        </div>
+
 
     {% else %}
 
-        <div class="text-center" style="padding:60px 20px;">
+        <!-- ====================================================== -->
+        <!-- EMPTY STATE -->
+        <!-- ====================================================== -->
+
+        <div class="analytics-section text-center" style="padding:60px 20px;">
 
             <h2>No applications yet</h2>
 
             <p>
-                Start tracking your internship and job applications.
+                Start tracking your internship and job applications
+                to unlock application analytics.
             </p>
 
             <a
