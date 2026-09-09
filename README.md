@@ -2,33 +2,41 @@
 
 ### A developer career management platform that turns career activity into measurable progress.
 
-DevCareer is a full-stack career management platform built with **Python and Flask** that gives developers one centralized workspace to manage their projects, technical skills, job applications, career goals, and learning progress.
+**DevCareer** is a full-stack career management platform built with **Python and Flask** that gives developers one centralized workspace to manage their projects, technical skills, job applications, career goals, and learning progress.
 
-Instead of simply storing career information, DevCareer connects these areas to provide **Career Score, Career Intelligence, application analytics, and personalized next-action recommendations**.
+Instead of simply storing career information, DevCareer connects these areas to provide **Career Score, Career Intelligence, application analytics, career progress tracking, and personalized next-action recommendations.**
+
+> **Track what you're building, what you're learning, where you're applying, and what you should focus on next — all from one place.**
 
 ---
 
-## 🎯 What is DevCareer?
+## 🎯 Why DevCareer?
 
-Managing a developer career often means switching between multiple tools:
+A developer's career activity is usually spread across multiple tools:
 
 * GitHub for projects
-* Spreadsheets for applications
+* Spreadsheets for job applications
 * Notes for career goals
 * Learning platforms for courses
 * Separate tools for tracking technical skills
 
 DevCareer brings these workflows together into a single career workspace.
 
-> **Track what you're building, what you're learning, where you're applying, and what you should focus on next — all from one place.**
+The goal isn't just to answer:
+
+> **"What have I done?"**
+
+It also aims to answer:
+
+> **"Where am I progressing, where am I falling behind, and what should I focus on next?"**
 
 ---
 
-## ✨ Key Features
+## ✨ Core Features
 
 ### 📊 Career Dashboard
 
-A centralized career command center showing:
+A centralized career command center that provides an overview of career activity.
 
 * Career Score
 * Project statistics
@@ -40,38 +48,40 @@ A centralized career command center showing:
 * Recent career activity
 * Career Intelligence
 * Career Progress
+* Next Best Action
 
 ---
 
 ### 🚀 Project Management
 
-Manage your development portfolio from one place.
+Manage and track development projects from one place.
 
 * Create projects
 * Edit project information
 * Track project status
-* Monitor completed, in-progress, and planned projects
-* View recent projects directly from the dashboard
+* Monitor completed projects
+* Monitor in-progress projects
+* Track planned projects
+* View recent projects from the dashboard
 
 ---
 
 ### 🧠 Skill Tracking
 
-Track technical skills and monitor proficiency over time.
+Track technical skills and monitor proficiency.
 
 * Add technical skills
 * Assign proficiency levels
+* Calculate average proficiency
 * Identify strongest skills
-* Identify skills that need improvement
-* Calculate average skill proficiency
+* Identify skills requiring improvement
+* Display top skills
 
 ---
 
 ### 💼 Job Application Tracker
 
 Manage internship and job applications through a structured pipeline.
-
-Supported stages include:
 
 ```text
 Wishlist
@@ -92,23 +102,24 @@ Rejected
 Withdrawn
 ```
 
-The application system provides:
+Application records can include:
 
-* Application tracking
-* Company and position information
-* Application dates
-* Job posting links
+* Company
+* Position
+* Application date
+* Job posting link
 * Notes
-* Status management
-* Edit and delete functionality
+* Application status
+* Edit functionality
+* Delete functionality
 
 ---
 
 ### 📈 Application Analytics
 
-DevCareer transforms application records into useful job-search metrics.
+DevCareer converts application records into useful job-search metrics.
 
-The dashboard provides:
+The dashboard tracks:
 
 * Total applications
 * Active applications
@@ -117,7 +128,7 @@ The dashboard provides:
 * Rejections
 * Interview rate
 * Offer rate
-* Application pipeline breakdown
+* Application pipeline
 
 This helps developers understand not only **how many applications they submitted**, but also how their job search is performing.
 
@@ -125,7 +136,7 @@ This helps developers understand not only **how many applications they submitted
 
 ### 🎯 Goal Management
 
-Set and track career objectives.
+Create and track career objectives.
 
 * Create career goals
 * Track progress
@@ -138,7 +149,7 @@ Set and track career objectives.
 
 ### 📚 Learning Tracker
 
-Keep learning progress connected to career development.
+Connect learning activity directly with career development.
 
 * Add learning topics
 * Track progress
@@ -149,39 +160,35 @@ Keep learning progress connected to career development.
 
 ---
 
-### 🧠 Career Intelligence
+## 🧠 Career Intelligence
 
 One of DevCareer's core concepts is moving beyond traditional CRUD functionality.
 
-The Career Intelligence layer analyzes the user's existing career data and identifies areas that may require attention.
-
-It considers information from:
+The Career Intelligence layer analyzes the user's existing career activity and identifies areas that may require attention.
 
 ```text
 Projects ───────┐
 Skills ─────────┤
 Applications ───┼──► Career Intelligence
-Goals ──────────┤           │
-Learning ───────┘           ▼
+Goals ──────────┤             │
+Learning ───────┘             ▼
                     Personalized Insights
-                    + Next Best Action
+                              +
+                       Next Best Action
 ```
 
-Examples of recommendations include:
+The system can identify areas such as:
 
-* Strengthening a weak technical skill
-* Turning learning into a practical project
-* Improving portfolio strength
-* Increasing application activity
-* Making progress on an inactive goal
+* Weak technical skills
+* Lack of practical projects
+* Low application activity
+* Inactive career goals
+* Learning that could be converted into practical work
+* Portfolio areas requiring improvement
 
-The system is designed to answer:
+The underlying idea is simple:
 
-> **"What should I focus on next?"**
-
-rather than simply:
-
-> "What data do I have?"
+> **Don't just tell the developer what they have done. Help them understand what they should focus on next.**
 
 ---
 
@@ -196,9 +203,20 @@ Current scoring factors include:
 * Skill proficiency
 * Job application activity
 
-The score is intended as a **progress indicator**, not as a definitive measurement of someone's career.
+The score is designed as a **progress indicator**, not as a definitive measurement of someone's career ability.
 
-As the user's career activity changes, the score changes with it.
+As career activity changes, the score changes with it.
+
+### Current scoring model
+
+```text
+Project Activity      → 30 points
+Skill Count           → 25 points
+Application Activity  → 20 points
+Skill Proficiency     → 25 points
+                         ─────
+                         100
+```
 
 ---
 
@@ -206,7 +224,7 @@ As the user's career activity changes, the score changes with it.
 
 Career Progress provides a unified view of development across multiple areas.
 
-It brings together:
+It combines:
 
 * Overall Career Score
 * Portfolio progress
@@ -215,21 +233,21 @@ It brings together:
 * Goal progress
 * Job-search activity
 
-This makes it easier to identify strengths and areas that need additional attention.
+This makes it easier to identify strengths and areas requiring additional attention.
 
 ---
 
 ## 🐙 GitHub Integration
 
-DevCareer includes GitHub profile integration to connect a developer's coding identity with their career dashboard.
+DevCareer connects GitHub information with the career dashboard.
 
-The dashboard can display GitHub-related information such as:
+The integration can display:
 
-* GitHub profile
+* GitHub profile information
 * Repository information
 * Programming language summary
 
-This creates a stronger connection between **career tracking and actual development work**.
+This creates a stronger connection between **career tracking and actual development activity**.
 
 ---
 
@@ -261,21 +279,21 @@ DevCareer follows a modular Flask architecture.
                  │
                  ▼
 ┌─────────────────────────────────┐
-│        Flask Application        │
+│       Flask Application         │
 │                                 │
-│ Authentication                  │
-│ Routes / Blueprints             │
-│ Dashboard                       │
-│ API Endpoints                   │
+│  Authentication                 │
+│  Routes / Blueprints            │
+│  Dashboard                      │
+│  API Endpoints                  │
 └────────────────┬────────────────┘
                  │
                  ▼
 ┌─────────────────────────────────┐
 │          Service Layer          │
 │                                 │
-│ Career Intelligence             │
-│ Career Analysis                 │
-│ GitHub Integration              │
+│  Career Intelligence            │
+│  Career Analysis                │
+│  GitHub Integration             │
 └────────────────┬────────────────┘
                  │
                  ▼
@@ -356,7 +374,7 @@ DevCareer/
 
 * Git
 * GitHub
-* GitHub API integration
+* GitHub API
 * VS Code
 * Python Virtual Environment
 
@@ -364,9 +382,9 @@ DevCareer/
 
 ## 🔌 API Layer
 
-DevCareer includes a backend API layer that provides a foundation for accessing platform functionality programmatically.
+DevCareer includes a backend API layer that provides a foundation for programmatic access to platform functionality.
 
-This architecture allows the project to be extended in the future toward:
+This architecture creates opportunities for future integrations such as:
 
 * External dashboards
 * Mobile applications
@@ -385,14 +403,14 @@ Make sure you have:
 * Python 3.x
 * Git
 
-### Clone the repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Rohittt-commits/DevCareer---platform-.git
 cd DevCareer---platform-
 ```
 
-### Create a virtual environment
+### 2. Create a virtual environment
 
 On Windows:
 
@@ -406,13 +424,13 @@ Activate it:
 venv\Scripts\activate
 ```
 
-### Install dependencies
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configure environment variables
+### 4. Configure environment variables
 
 Create a `.env` file in the project root:
 
@@ -422,15 +440,15 @@ SECRET_KEY=your-secret-key
 
 If additional integrations require credentials, configure them through environment variables.
 
-**Never commit API keys, passwords, or other secrets to GitHub.**
+> **Never commit API keys, passwords, or other secrets to GitHub.**
 
-### Run the application
+### 5. Run the application
 
 ```bash
 python run.py
 ```
 
-Open the application at:
+The application will be available at:
 
 ```text
 http://127.0.0.1:5000
@@ -452,6 +470,15 @@ Then run the application:
 python run.py
 ```
 
+For Git workflow:
+
+```bash
+git status
+git add .
+git commit -m "Your commit message"
+git push origin main
+```
+
 ---
 
 ## 💡 Development Philosophy
@@ -468,7 +495,13 @@ DevCareer aims to additionally answer:
 
 > **"Where am I progressing, where am I falling behind, and what should I focus on next?"**
 
-This philosophy drives the Career Score, Career Intelligence, Application Analytics, and Career Progress features.
+This philosophy drives the platform's:
+
+* Career Score
+* Career Intelligence
+* Application Analytics
+* Career Progress
+* Next Best Action
 
 ---
 
@@ -486,7 +519,7 @@ Potential future improvements include:
 * [ ] OAuth authentication
 * [ ] Advanced GitHub activity analysis
 
-These features are intentionally kept outside the current core scope so the existing platform can remain focused and maintainable.
+These features are intentionally outside the current core scope so the existing platform remains focused and maintainable.
 
 ---
 
@@ -496,22 +529,35 @@ These features are intentionally kept outside the current core scope so the exis
 
 DevCareer currently includes:
 
-* User authentication
-* Developer dashboard
-* Project management
-* Skill tracking
-* Job application tracking
-* Application Analytics
-* Goal management
-* Learning management
-* Career Score
-* Career Intelligence
-* Next Best Action recommendations
-* Career Progress
-* GitHub integration
-* Backend API layer
+* ✅ User authentication
+* ✅ Developer dashboard
+* ✅ Project management
+* ✅ Skill tracking
+* ✅ Job application tracking
+* ✅ Application Analytics
+* ✅ Goal management
+* ✅ Learning management
+* ✅ Career Score
+* ✅ Career Intelligence
+* ✅ Next Best Action recommendations
+* ✅ Career Progress
+* ✅ GitHub integration
+* ✅ Backend API layer
 
-The project is currently being prepared as a **portfolio-ready full-stack Python project**.
+### 🚀 Project Status
+
+**Portfolio-ready full-stack Python project.**
+
+The project is actively maintained and serves as a practical demonstration of:
+
+* Backend development with Flask
+* Database design with SQLAlchemy
+* Authentication and user data isolation
+* Service-layer architecture
+* Data-driven career analytics
+* API integration
+* Git/GitHub workflow
+* Building a complete real-world web application
 
 ---
 
@@ -523,11 +569,9 @@ The project is currently being prepared as a **portfolio-ready full-stack Python
 
 Building practical software projects focused on backend development, AI-assisted applications, and real-world problem solving.
 
-**GitHub:**
-https://github.com/Rohittt-commits
+**GitHub:** Rohittt-commits
 
-**LinkedIn:**
-https://www.linkedin.com/in/rohit-joshi-910346381
+**LinkedIn:** Rohit Joshi
 
 ---
 
