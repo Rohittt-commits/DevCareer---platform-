@@ -578,3 +578,17 @@ Building practical software projects focused on backend development, AI-assisted
 ## 📄 License
 
 This project is currently developed as a personal portfolio and learning project.
+
+## 📸 Screenshots
+
+### Dashboard
+![DevCareer Dashboard](screenshots/dashboard.png)
+
+### Skills
+![Skills Tracking](screenshots/skills.png)
+
+### Internship Applications
+![Internship Applications](screenshots/internship.png)
+
+### Projects
+![Project Management](screenshots/projects.png)
